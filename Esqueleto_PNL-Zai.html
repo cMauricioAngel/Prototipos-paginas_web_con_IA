@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enciclopedia PNL | Plataforma Educativa Interactiva</title>
+    <meta name="description" content="Plataforma educativa interactiva para el estudio exhaustivo de la Programación Neurolingüística (PNL).">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+                            400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9',
+                            800: '#5b21b6', 900: '#4c1d95', 950: '#2e1065'
+                        },
+                        accent: {
+                            50: '#fdf4ff', 100: '#fae8ff', 200: '#f5d0fe', 300: '#f0abfc',
+                            400: '#e879f9', 500: '#d946ef', 600: '#c026d3', 700: '#a21caf',
+                            800: '#86198f', 900: '#701a75', 950: '#4a044e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- KaTeX (Matemáticas/Lógica) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+
+    <!-- Prism.js (Highlighting) -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <!-- Mermaid.js (Diagramas) -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+        window.mermaid = mermaid;
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-sidebar: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        .dark {
+            --bg-main: #0f172a;
+            --bg-sidebar: #1e1b4b; /* Violet 950 oscuro personalizado */
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #312e81;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Custom */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #a78bfa; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #6d28d9; }
+
+        /* Sidebar active link */
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), transparent);
+            border-left: 4px solid #d946ef;
+            color: #d946ef;
+            font-weight: 600;
+        }
+        .dark .nav-link.active {
+            background: linear-gradient(90deg, rgba(217, 70, 239, 0.15), transparent);
+            color: #f0abfc;
+        }
+
+        /* Animaciones de transición */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilos de impresión */
+        @media print {
+            #sidebar, #menu-btn, #theme-toggle, .no-print { display: none !important; }
+            main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+            body { background: white !important; color: black !important; font-size: 12pt; }
+            .modulo-container { page-break-inside: avoid; border: none !important; box-shadow: none !important; }
+            h1, h2, h3 { color: black !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex">
+
+    <!-- Botón Hamburguesa (Móvil) -->
+    <button id="menu-btn" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-primary-600 text-white shadow-lg" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Overlay para móvil -->
+    <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 z-40 flex flex-col bg-[var(--bg-sidebar)] border-r border-[var(--border-color)] transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out no-print">
+        
+        <!-- Header Sidebar -->
+        <div class="p-6 border-b border-[var(--border-color)]">
+            <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                Enciclopedia PNL
+            </h1>
+            <p class="text-xs text-[var(--text-muted)] mt-1">Plataforma de Estudio Avanzado</p>
+        </div>
+
+        <!-- Progreso Global -->
+        <div class="px-6 py-4 border-b border-[var(--border-color)]">
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-medium text-[var(--text-muted)]">Progreso del Curso</span>
+                <span id="progress-text" class="text-xs font-bold text-primary-600 dark:text-accent-400">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-primary-950 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-gradient-to-r from-primary-500 to-accent-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <nav class="flex-1 overflow-y-auto py-4" aria-label="Navegación principal">
+            <ul class="space-y-1 px-2">
+                <li><a href="#modulo-0" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">0. Introducción</a></li>
+                <li><a href="#modulo-1" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">1. Fundamentos Epistemológicos</a></li>
+                <li><a href="#modulo-2" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">2. Sistemas Representacionales (VAK)</a></li>
+                <li><a href="#modulo-3" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">3. El Meta-Modelo</a></li>
+                <li><a href="#modulo-4" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">4. Modelo Milton </a></li>
+                <li><a href="#modulo-5" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">5. Anclaje y Recursos </a></li>
+                <li><a href="#modulo-6" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">6. TOTE y Niveles </a></li>
+                <li><a href="#modulo-7" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">7. Rapport y Posiciones (Próx.)</a></li>
+                <li><a href="#modulo-8" class="nav-link block py-2.5 px-4 rounded-md text-sm text-[var(--text-main)] hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">8. Aplicaciones y Ética (Próx.)</a></li>
+            </ul>
+        </nav>
+
+        <!-- Footer Sidebar -->
+        <div class="p-4 border-t border-[var(--border-color)] flex justify-between items-center">
+            <button id="theme-toggle" class="flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-primary-600 dark:hover:text-accent-400 transition-colors" aria-label="Cambiar tema">
+                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <span>Tema</span>
+            </button>
+            <button onclick="window.print()" class="text-sm text-[var(--text-muted)] hover:text-primary-600 dark:hover:text-accent-400 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>Imprimir</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 md:w-[calc(100%-18rem)] md:ml-72 overflow-x-hidden">
+        
+        <div id="content-wrapper" class="max-w-5xl mx-auto p-6 md:p-10 lg:p-12">
+            
+            <!-- Módulo 0: Introducción -->
+            <section id="modulo-0" class="modulo-container mb-16 fade-in" aria-labelledby="title-mod-0">
+                <div class="bg-gradient-to-br from-primary-600 to-accent-600 p-8 rounded-2xl shadow-xl text-white mb-10">
+                    <h2 id="title-mod-0" class="text-3xl md:text-4xl font-extrabold mb-2">Programación Neurolingüística (PNL)</h2>
+                    <p class="opacity-90 text-lg">Guía de estudio enciclopédica para preparación universitaria. Arquetipo: Royal Purple | Arquitectura: Sidebar Documentation.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                    <p class="text-[var(--text-muted)]">Bienvenido a la plataforma. Usa el menú lateral para navegar entre los módulos. Tu progreso se guardará automáticamente.</p>
+                </div>
+            </section>
+
+            <!-- LOS MÓDULOS SE INYECTAN AQUÍ -->
+            <div id="modulos-inject-container">
+
+                <!-- ================= INICIO MÓDULO 1 ================= -->
+                <section id="modulo-1" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-1">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 1</span>
+                        <h2 id="title-mod-1" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Fundamentos Epistemológicos e Históricos</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">Comprendemos la génesis de la PNL, sus raíces interdisciplinares y los axiomas que rigen su modelo pragmático de la experiencia subjetiva.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">1.1. Definición Operativa y Etimológica</h3>
+                            <p class="mb-3">La Programación Neurolingüística (PNL) es un modelo pragmático de comunicación y cambio personal que estudia cómo codificamos, procesamos y modificamos la experiencia subjetiva. Se descompone en tres ejes:</p>
+                            <ul class="list-disc pl-6 space-y-2 text-[var(--text-main)]">
+                                <li><strong>Neuro:</strong> Se refiere a nuestro sistema nervioso y filtros neurológicos (los cinco sentidos) a través de los cuales percibimos el mundo. La mente y el cuerpo forman un sistema cibernético indivisible.</li>
+                                <li><strong>Lingüística:</strong> El lenguaje (verbal y no verbal) que usamos para codificar, organizar y comunicar nuestra experiencia. El lenguaje estructura nuestra realidad (gramática de la mente).</li>
+                                <li><strong>Programación:</strong> Los patrones, secuencias y hábitos de pensamiento (programas) que guían nuestro comportamiento. La PNL busca "re-programar" estas secuencias para ampliar opciones.</li>
+                            </ul>
+                            <p class="mt-3 p-3 bg-primary-50 dark:bg-primary-900/20 rounded text-sm">Desde el punto de vista formal, la PNL opera bajo la ecuación: \( M = f(T, F) \), donde el Mapa (M) es una función del Territorio (T) filtrado (F) por nuestras capacidades neurofisiológicas y lingüísticas.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">1.2 - 1.3. Génesis Histórica y "Los Tres Magos"</h3>
+                            <p class="mb-4">Entre 1972 y 1975, en la Universidad de California, Santa Cruz, <strong>Richard Bandler</strong> (matemático, informático y músico) y <strong>John Grinder</strong> (lingüista y experto en gramática transformacional) colaboraron en el proyecto de modelar patrones de excelencia terapéutica. Fueron asesorados por el antropólogo <strong>Gregory Bateson</strong>.</p>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Fritz Perls</h4>
+                                    <p class="text-sm mt-1">Padre de la Terapia Gestalt. Modelado por su habilidad para generar *awareness* (toma de conciencia) y trabajar con la polaridad de la experiencia presente.</p>
+                                </div>
+                                <div class="p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Virginia Satir</h4>
+                                    <p class="text-sm mt-1">Pionera de la terapia familiar sistémica. Modelada por su capacidad de establecer rapport profundo, validación del self y manejo de dinámicas relacionales.</p>
+                                </div>
+                                <div class="p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Milton Erickson</h4>
+                                    <p class="text-sm mt-1">Padre de la hipnosis clínica moderna. Modelado por su uso del lenguaje artefactualmente vago, metáforas terapéuticas y utilización de la resistencia del paciente.</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">1.4. Influencias Teóricas Interdisciplinares</h3>
+                            <div class="mermaid bg-[var(--bg-main)] p-4 rounded">
+                                graph TD
+                                    A[Alfred Korzybski] -->|El mapa no es el territorio| PNL
+                                    B[Noam Chomsky] -->|Estructura superficial vs profunda| PNL
+                                    C[Gregory Bateson] -->|Cibernética de segundo orden| PNL
+                                    D[Paul Watzlawick] -->|Axiomas comunicacionales| PNL
+                                    PNL[Programación Neurolingüística]
+                                    style PNL fill:#8b5cf6,stroke:#d946ef,stroke-width:2px,color:#fff
+                            </div>
+                            <ul class="mt-4 list-disc pl-6 space-y-2 text-[var(--text-main)]">
+                                <li><strong>Alfred Korzybski (Semántica General):</strong> Postulado central: "El mapa no es el territorio". La palabra no es la cosa que nombra; nuestra representación interna siempre es una edición incompleta de la realidad externa.</li>
+                                <li><strong>Noam Chomsky (Gramática Transformacional):</strong> Distinción entre Estructura Profunda (significado completo, intuido) y Estructura Superficial (lo que decimos, una versión reducida). El Meta-Modelo se basa en esto.</li>
+                                <li><strong>Gregory Bateson (Cibernética):</strong> Doble vínculo, teoría de tipos lógicos de Russell y la idea de que la información es "toda diferencia que hace una diferencia".</li>
+                                <li><strong>Paul Watzlawick (Palo Alto):</strong> La imposibilidad de no comunicar; toda conducta es comunicación.</li>
+                            </ul>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">1.5. Presuposiciones Fundamentales</h3>
+                            <p class="mb-4">No son verdades científicas absolutas, sino axiomas operativos o hipótesis de trabajo. Asumirlas genera mayor flexibilidad y opciones de cambio.</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">1. El mapa no es el territorio.</p>
+                                    <p class="text-sm mt-1">Respetamos los modelos del mundo de los demás. La realidad es inaccesible; solo operamos con representaciones.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">2. Las personas funcionan perfectamente.</p>
+                                    <p class="text-sm mt-1">Nadie está "roto". Las elecciones son óptimas dadas las opciones disponibles en el mapa de la persona.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">3. Todo comportamiento tiene intención positiva.</p>
+                                    <p class="text-sm mt-1">Toda conducta se origina en un intento de satisfacer una necesidad positiva (protección, atención, seguridad).</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">4. El significado de la comunicación es la respuesta que obtienes.</p>
+                                    <p class="text-sm mt-1">No importa la intención; si el receptor actúa de forma no deseada, el emisor debe ajustar su comunicación.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">5. Poseemos todos los recursos que necesitamos.</p>
+                                    <p class="text-sm mt-1">No hay personas sin recursos, solo estados de consciencia sin acceso a ellos.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <p class="font-semibold text-primary-700 dark:text-accent-400">6. En todo sistema, el elemento más flexible controla el sistema.</p>
+                                    <p class="text-sm mt-1">La Ley de la Variedad Requerida de Ashby. Quien tiene más opciones de conducta domina la interacción.</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">1.6 - 1.8. Modelado, Evolución y Estatus Científico</h3>
+                            <p class="mb-3">El objetivo de la PNL no es la terapia en sí, sino el <strong>modelado</strong>: el proceso de extraer y replicar la estructura subjetiva de la excelencia. La PNL clásica (70s) derivó en la "PNL de Nueva Generación" (90s), liderada por Robert Dilts y Judith DeLozier, integrando el campo unificado y niveles neurológicos.</p>
+                            <p><strong>Debate Científico:</strong> Autores como Scott Lilienfeld (2003) clasifican a la PNL como una pseudociencia debido a la falta de evidencia empírica robusta para algunas de sus afirmaciones. Sin embargo, en el ámbito del coaching y psicoterapia pragmática, sus técnicas muestran utilidad clínica si se aplican como heurísticas de comunicación y no como leyes neurobiológicas absolutas.</p>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos y Excepciones</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Confundir Presuposición con Verdad Objetiva:</strong> Decir "todo comportamiento tiene intención positiva" no significa que el comportamiento sea éticamente bueno. Significa que, en la lógica interna de la persona, busca un beneficio.</li>
+                            <li><strong>Pensar que la PNL es Manipulación:</strong> Error conceptual extendido. La PNL ofrece herramientas de influencia, pero el código deontológico exige usarlas con consentimiento y en pro del bienestar.</li>
+                            <li><strong>Reduccionismo Científico:</strong> Creer que porque los ojos van arriba a la derecha la persona miente. El modelo de movimientos oculares es una pista, no un polígrafo.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Análisis de Transcripción de Perls</h3>
+                        <p class="mb-4 text-sm"><strong>Contexto:</strong> Un cliente (C) expresa malestar. Fritz Perls (F) responde. Analizamos los patrones extraídos por Bandler y Grinder.</p>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded font-mono text-sm mb-4 border border-[var(--border-color)]">
+                            <p><strong>C:</strong> Siento que mi madre me aplasta. No puedo respirar cuando me habla.</p>
+                            <p><strong>F:</strong> En este momento, ¿quién es tu madre aquí? Cierra los ojos. ¿Dónde sientes ese aplastamiento en tu cuerpo? Hazlo más grande.</p>
+                        </div>
+                        <p class="mb-2"><strong>Análisis PNL:</strong></p>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>El aquí y el ahora (T. Gestalt):</strong> Perls saca al cliente del recuerdo (pasado) y lo ancla en la experiencia presente.</li>
+                            <li><strong>Acceso kinestésico y amplificación:</strong> Perls cambia el foco de lo semántico a lo somático ("¿Dónde lo sientes?"). Ordena "Hazlo más grande", técnica clásica de amplificación de la submodalidad (paradoja del cambio).</li>
+                        </ul>
+                    </div>
+                    <div id="lab-1" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Mapa vs Territorio"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Experimenta cómo un mismo evento ("Territorio") se transforma drásticamente en nuestra representación interna ("Mapa") según los filtros aplicados.</p>
+                        <div class="grid md:grid-cols-2 gap-6 items-start">
+                            <div class="space-y-4 p-4 bg-[var(--bg-main)] rounded border border-[var(--border-color)]">
+                                <div>
+                                    <label for="lab-emocion" class="block text-sm font-medium mb-1">Estado Emocional Base</label>
+                                    <select id="lab-emocion" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-[var(--text-main)]">
+                                        <option value="ansioso">Ansioso / Alerta</option>
+                                        <option value="relajado">Relajado / Abierto</option>
+                                        <option value="irritado">Irritado / A la defensiva</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="lab-creencia" class="block text-sm font-medium mb-1">Creencia Subyacente (Filtro)</label>
+                                    <select id="lab-creencia" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-[var(--text-main)]">
+                                        <option value="amenaza">El mundo es un lugar peligroso</option>
+                                        <option value="oportunidad">Cada interacción es una oportunidad</option>
+                                        <option value="juicio">La gente me está evaluando</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="lab-vak" class="block text-sm font-medium mb-1">Sistema Representacional Dominante</label>
+                                    <select id="lab-vak" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-[var(--text-main)]">
+                                        <option value="visual">Visual (Ven imágenes)</option>
+                                        <option value="auditivo">Auditivo (Escuchan tonos)</option>
+                                        <option value="kinestesico">Kinestésico (Sienten sensaciones)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-primary-50 dark:bg-primary-950/30 rounded border border-primary-200 dark:border-primary-800 h-full flex flex-col">
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-2">Evento Objetivo (Territorio):</h4>
+                                <p class="text-sm italic mb-3">"Un colega pasa a tu lado en el pasillo y no te saluda."</p>
+                                <div class="mt-auto pt-3 border-t border-primary-200 dark:border-primary-800">
+                                    <h4 class="text-sm font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-2">Experiencia Subjetiva (Tu Mapa):</h4>
+                                    <div id="lab-output" class="text-sm text-[var(--text-main)] min-h-[80px]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-1" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-1" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-1" class="font-bold text-primary-600 dark:text-accent-400">0/8</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Mapa:</dt><dd class="text-[var(--text-muted)]">La representación interna de la realidad que construimos, filtrada por nuestros sentidos y creencias.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Territorio:</dt><dd class="text-[var(--text-muted)]">La realidad objetiva exterior, inaccesible en su totalidad para el sistema nervioso humano.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Modelado:</dt><dd class="text-[var(--text-muted)]">Proceso de extraer y replicar la estructura de excelencia de una persona.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Presuposición:</dt><dd class="text-[var(--text-muted)]">Axioma operativo que, al asumirse como verdadero, facilita el cambio y la flexibilidad conductual.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Estructura Profunda:</dt><dd class="text-[var(--text-muted)]">El significado completo e intuido de una experiencia, previo a su reducción al lenguaje hablado.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Cibernética de 2º orden:</dt><dd class="text-[var(--text-muted)]">La idea de que el observador es parte del sistema observado; aplicada a la experiencia subjetiva.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- ================= INICIO MÓDULO 2 ================= -->
+                <section id="modulo-2" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-2">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 2</span>
+                        <h2 id="title-mod-2" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Sistemas Representacionales y Submodalidades</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">Estudiamos cómo codificamos la información en nuestra mente (VAK) y las cualidades estructurales de esos pensamientos (submodalidades), base de toda experiencia subjetiva.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">2.1 - 2.2. Sistemas Representacionales (VAK) y Sinestesia</h3>
+                            <p class="mb-3">Un sistema representacional es la forma en que nuestro sistema nervioso codifica y almacena la información sensorial. Los tres canales principales son:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li><strong>Visual (V):</strong> Imágenes, colores, formas. Procesamiento rápido y simultáneo.</li>
+                                <li><strong>Auditivo (A):</strong> Sonidos, tonos, ritmo, diálogos internos. Procesamiento secuencial.</li>
+                                <li><strong>Kinestésico (K):</strong> Sensaciones táctiles, emociones, temperatura, peso. Procesamiento lento y orgánico.</li>
+                                <li><strong>Auditivo Digital (Ad):</strong> El monólogo interno, el lenguaje interno sin tono emocional. Es el sistema de la lógica y la racionalización.</li>
+                            </ul>
+                            <div class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded text-sm">
+                                <strong>Sinestesia:</strong> En PNL, se refiere al solapamiento automático entre sistemas. Por ejemplo, ver una imagen mental de un momento vergonzoso (V) genera automáticamente una sensación de calor en el rostro (K). El cambio terapéutico a menudo manipula estas sinestesias.
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">2.3. Predicados Lingüísticos</h3>
+                            <p class="mb-4">Son las palabras (verbos, adverbios, adjetivos) que revelan qué sistema representacional está usando una persona en ese momento.</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead class="bg-[var(--bg-main)] border-b border-[var(--border-color)]">
+                                        <tr>
+                                            <th class="p-3 font-semibold text-primary-700 dark:text-accent-400">Visual</th>
+                                            <th class="p-3 font-semibold text-primary-700 dark:text-accent-400">Auditivo</th>
+                                            <th class="p-3 font-semibold text-primary-700 dark:text-accent-400">Kinestésico</th>
+                                            <th class="p-3 font-semibold text-primary-700 dark:text-accent-400">Auditivo Digital</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-[var(--border-color)]">
+                                        <tr><td class="p-3">Ver, enfocar, claro, oscuro, imagen</td><td class="p-3">Escuchar, resonar, ruidoso, armónico</td><td class="p-3">Sentir, tocar, pesado, frío, tensión</td><td class="p-3">Pensar, entender, lógico, sentido, procesar</td></tr>
+                                        <tr><td class="p-3">Perspectiva, brillante, neblinoso</td><td class="p-3">Dime, escuchar, agudo, sordo</td><td class="p-3">Fluido, sólido, suave, áspero</td><td class="p-3">Aprender, experiencia, conceptual</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">2.4 - 2.5. Claves de Acceso Ocular y Fisiología</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="mb-3 text-sm">Los ojos se mueren hacia zonas del cerebro asociadas al procesamiento sensorial. Modelo clásico (para personas diestras):</p>
+                                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                                        <li><strong>Arriba Izquierda (Vc):</strong> Recuerdo visual (algo visto antes).</li>
+                                        <li><strong>Arriba Derecha (Vr):</strong> Construcción visual (imaginar algo nuevo).</li>
+                                        <li><strong>Medio Izquierda (Ac):</strong> Recuerdo auditivo (un sonido conocido).</li>
+                                        <li><strong>Medio Derecha (Ar):</strong> Construcción auditiva (un sonido nuevo).</li>
+                                        <li><strong>Abajo Izquierda (Ad):</strong> Diálogo interno (hablarse a sí mismo).</li>
+                                        <li><strong>Abajo Derecha (K):</strong> Acceso kinestésico (emociones/sensaciones).</li>
+                                    </ul>
+                                </div>
+                                <div class="mermaid bg-[var(--bg-main)] p-4 rounded">
+                                    graph TD
+                                        subgraph Ojos del Observador
+                                        UL["Arriba Izq (Vc)"] --> UR["Arriba Der (Vr)"]
+                                        ML["Medio Izq (Ac)"] --> MR["Medio Der (Ar)"]
+                                        DL["Abajo Izq (Ad)"] --> DR["Abajo Der (K)"]
+                                        end
+                                        style UL fill:#c4b5fd,stroke:#7c3aed
+                                        style UR fill:#f0abfc,stroke:#c026d3
+                                        style ML fill:#c4b5fd,stroke:#7c3aed
+                                        style MR fill:#f0abfc,stroke:#c026d3
+                                        style DL fill:#c4b5fd,stroke:#7c3aed
+                                        style DR fill:#f0abfc,stroke:#c026d3
+                                </div>
+                            </div>
+                            <p class="mt-4 text-sm text-[var(--text-muted)]"><strong>Fisiología:</strong> Los visuales suelen tener postura erguida, respiración alta y rápida, voz aguda. Los auditivos postura intermedia, respiración pecho medio, voz rítmica. Los kinestésicos postura relajada, respiración abdominal profunda, voz lenta y grave.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">2.6 - 2.10. Submodalidades: La Estructura del Pensamiento</h3>
+                            <p class="mb-4">Si los sistemas VAK son los canales, las submodalidades son las <strong>cualidades o características</strong> de la representación dentro de ese canal. Son los "píxeles" de nuestra experiencia subjetiva.</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold mb-2">Digitales vs Analógicas</h4>
+                                    <p class="text-sm mb-2"><strong>Analógicas:</strong> Varían en un continuo (ej. volumen, brillo, distancia). Pueden hacerse gradualmente mayores o menores.</p>
+                                    <p class="text-sm"><strong>Digitales:</strong> Binarias, de encendido/apagado (ej. color vs blanco y negro, 2D vs 3D, asociado vs disociado).</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2">Submodalidades Críticas (Drivers)</h4>
+                                    <p class="text-sm mb-2">Son aquellas que, al cambiarlas, arrastran y modifican el resto de la experiencia. Ejemplos comunes:</p>
+                                    <ul class="list-disc pl-5 text-sm">
+                                        <li>Brillo y Tamaño (en Visual).</li>
+                                        <li>Ubicación (espacial) de la sensación o imagen.</li>
+                                        <li>Asociado/Disociado.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-sm">
+                                <strong>Mapeo Cruzado (Mapping Across):</strong> Técnica que consiste en tomar las submodalidades críticas de una experiencia de recurso (ej. motivación) y aplicarlas a una experiencia neutra o limitante para cambiar su significado emocional.
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos y Excepciones</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Tipificar rígidamente:</strong> "Eres visual". Error. Todos usamos todos los sistemas. Lo que existe es una preferencia en un contexto determinado.</li>
+                            <li><strong>El mito del polígrafo ocular:</strong> Creer que mirar arriba a la derecha significa que el paciente miente. Es una construcción visual, no necesariamente mentira.</li>
+                            <li><strong>Ignorar zurdos:</strong> En un porcentaje significativo de personas zurdas, el patrón ocular está cruzado (espejo). Suponer el modelo estándar genera lecturas erróneas.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Detección de Sistema Representacional</h3>
+                        <p class="mb-4 text-sm"><strong>Contexto:</strong> Transcripción de sesión de coaching. El cliente describe su ansiedad laboral.</p>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded font-mono text-sm mb-4 border border-[var(--border-color)]">
+                            <p>"No sé, escucho a mi jefe gritar en mi cabeza todo el día. Su voz es tan fuerte que me ahoga. Intento verle la cara de enojo, pero me pesa tanto el pecho que tengo que sentarme. Siento que no puedo respirar."</p>
+                        </div>
+                        <p class="mb-2"><strong>Análisis del Coach PNL:</strong></p>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Predicados identificados:</strong> "Escucho", "voz fuerte" (Auditivo). "Verle la cara" (Visual). "Ahoga", "pesa", "sentarme", "siento", "respirar" (Kinestésico).</li>
+                            <li><strong>Estrategia de sinestesia:</strong> El cliente procesa auditivamente (A -> voz del jefe), lo que dispara una fuerte respuesta kinestésica (K -> ahogo, peso). El visual es secundario ("intento ver").</li>
+                            <li><strong>Intervención inicial:</strong> A través del canal auditivo. "Si esa voz tuviera un control de volumen, ¿en qué número está? Vamos a bajarlo a un 2. ¿Qué pasa ahora con el peso en el pecho?" (Intervención sobre submodalidades driver).</li>
+                        </ul>
+                    </div>
+                    <div id="lab-2" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Detector VAK"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Pega un texto (o tus pensamientos sobre una situación) en el área de texto. El analizador identificará los predicados lingüísticos y mostrará tu perfil representacional dominante en ese discurso.</p>
+                        <div class="grid md:grid-cols-2 gap-6 items-start">
+                            <div class="space-y-3">
+                                <textarea id="vak-input" class="w-full h-40 p-3 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-[var(--text-main)] text-sm" placeholder="Ej: Veo un futuro brillante, pero escucho críticas en mi mente que me hacen sentir pesadez..."></textarea>
+                                <button id="vak-analyze-btn" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded transition-colors">Analizar Texto</button>
+                            </div>
+                            <div class="p-4 bg-primary-50 dark:bg-primary-950/30 rounded border border-primary-200 dark:border-primary-800">
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-3">Perfil Representacional:</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span>Visual</span><span id="vak-v-pct">0%</span></div>
+                                        <div class="w-full bg-gray-200 dark:bg-slate-900 rounded-full h-2.5"><div id="vak-v-bar" class="bg-blue-500 h-2.5 rounded-full" style="width: 0%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span>Auditivo</span><span id="vak-a-pct">0%</span></div>
+                                        <div class="w-full bg-gray-200 dark:bg-slate-900 rounded-full h-2.5"><div id="vak-a-bar" class="bg-yellow-500 h-2.5 rounded-full" style="width: 0%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span>Kinestésico</span><span id="vak-k-pct">0%</span></div>
+                                        <div class="w-full bg-gray-200 dark:bg-slate-900 rounded-full h-2.5"><div id="vak-k-bar" class="bg-red-500 h-2.5 rounded-full" style="width: 0%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span>Auditivo Digital</span><span id="vak-ad-pct">0%</span></div>
+                                        <div class="w-full bg-gray-200 dark:bg-slate-900 rounded-full h-2.5"><div id="vak-ad-bar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%"></div></div>
+                                    </div>
+                                </div>
+                                <p id="vak-result" class="mt-4 text-sm font-medium text-[var(--text-main)]"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-2" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-2" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-2" class="font-bold text-primary-600 dark:text-accent-400">0/10</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Sistema Representacional:</dt><dd class="text-[var(--text-muted)]">Modalidad sensorial (V, A, K) utilizada para codificar y dar sentido a la experiencia.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Predicados:</dt><dd class="text-[var(--text-muted)]">Palabras sensoriales específicas que indican el sistema representacional en uso.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Sinestesia:</dt><dd class="text-[var(--text-muted)]">Solapamiento automático entre sistemas representacionales (ej. ver una imagen y sentir una emoción).</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Submodalidad:</dt><dd class="text-[var(--text-muted)]">Cualidad o característica estructural de una representación (brillo, volumen, temperatura).</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Driver (Submodalidad Crítica):</dt><dd class="text-[var(--text-muted)]">Submodalidad que impacta masivamente en la experiencia, modificando las demás.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Mapeo Cruzado:</dt><dd class="text-[var(--text-muted)]">Transferir las submodalidades de una experiencia a otra para cambiar su impacto.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Claves de Acceso Ocular:</dt><dd class="text-[var(--text-muted)]">Movimientos de los ojos que indican qué representación interna se está procesando.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Auditivo Digital (Ad):</dt><dd class="text-[var(--text-muted)]">El monólogo interno, la racionalización y el diálogo interno sin tono emocional.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- ================= INICIO MÓDULO 3 ================= -->
+                <section id="modulo-3" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-3">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 3</span>
+                        <h2 id="title-mod-3" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">El Meta-Modelo del Lenguaje</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">El primer modelo formal de la PNL. Una herramienta de precisión para recuperar información borrada, generalizada o distorsionada por el lenguaje.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">3.1 - 3.2. Origen y Fundamento Chomskiano</h3>
+                            <p class="mb-3">Extraído de <em>La Estructura de la Magia I</em> (1975). El Meta-Modelo se basa en la Gramática Transformacional de Noam Chomsky. Postula que la realidad (Estructura Profunda) se transforma en lenguaje hablado (Estructura Superficial) sufriendo pérdidas de información.</p>
+                            <div class="mermaid bg-[var(--bg-main)] p-4 rounded">
+                                graph LR
+                                    A[Estructura Profunda<br>Experiencia Completa] -->|Transformación| B(Estructura Superficial<br>Lenguaje Hablado)
+                                    B -->|Meta-Modelo| C(Recuperación de lo Borrado)
+                                    style A fill:#5b21b6,stroke:#d946ef,color:#fff
+                                    style B fill:#7c3aed,stroke:#d946ef,color:#fff
+                                    style C fill:#a78bfa,stroke:#d946ef,color:#000
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">3.3 - 3.4. Las Universales y Patrones</h3>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400 mb-2">Omisión</h4>
+                                    <p class="text-sm mb-2">Partes de la experiencia se borran.</p>
+                                    <ul class="list-disc pl-4 text-xs space-y-1 text-[var(--text-muted)]">
+                                        <li><strong>Borrado simple:</strong> "Me molesta" -> ¿Qué te molesta?</li>
+                                        <li><strong>Comparativos:</strong> "Es mejor" -> ¿Mejor que qué?</li>
+                                        <li><strong>Juicios:</strong> "Es malo" -> ¿Quién lo juzga?</li>
+                                        <li><strong>Nominalizaciones:</strong> "Falta de comunicación" -> ¿Quién no se comunica cómo?</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400 mb-2">Generalización</h4>
+                                    <p class="text-sm mb-2">Reglas aplicadas a todos los casos.</p>
+                                    <ul class="list-disc pl-4 text-xs space-y-1 text-[var(--text-muted)]">
+                                        <li><strong>Universales:</strong> "Siempre fallo" -> ¿Siempre? ¿Ni una vez?</li>
+                                        <li><strong>Modales:</strong> "No puedo" -> ¿Qué te lo impide?</li>
+                                        <li><strong>Equivalencia:</strong> "No me miras, me odias" -> ¿Cómo significa A que B?</li>
+                                        <li><strong>Presuposiciones:</strong> "¿Cuándo dejarás?" -> ¿Lo hago?</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400 mb-2">Distorsión</h4>
+                                    <p class="text-sm mb-2">Alteración sujeto-objeto.</p>
+                                    <ul class="list-disc pl-4 text-xs space-y-1 text-[var(--text-muted)]">
+                                        <li><strong>Lectura de mente:</strong> "Sé que piensas..." -> ¿Cómo lo sabes?</li>
+                                        <li><strong>Causa-Efecto:</strong> "Me pones nervioso" -> ¿Cómo te lo causo?</li>
+                                        <li><strong>Intencionalidad:</strong> "El perro me castiga" -> ¿Tiene intención un perro?</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos y Excepciones</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Ametralladora de Meta-Modelo:</strong> Disparar preguntas de recuperación una tras otra sin rapport, lo que genera defensividad y se percibe como interrogatorio policial.</li>
+                            <li><strong>Confundir Nominalización con Sustantivo:</strong> "Mesa" es un sustantivo físico (no se puede nominalizar). "Frustración" es una nominalización (proceso congelado). Error común al aplicar el challenge.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Análisis Línea por Línea</h3>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded font-mono text-sm mb-4 border border-[var(--border-color)]">
+                            <p>"La <u>falta de apoyo</u> de mis compañeros <u>me hace sentir</u> que <u>no soy capaz</u> de liderar este proyecto, <u>todos me rechazan</u>."</p>
+                        </div>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Nominalización:</strong> "Falta de apoyo" -> ¿Quién específicamente no apoya a quién y cómo?</li>
+                            <li><strong>Causa-Efecto:</strong> "me hace sentir" -> ¿Cómo específicamente la conducta de ellos causa tu incapacidad para liderar?</li>
+                            <li><strong>Equivalencia Compleja:</strong> "sentir que no soy capaz" -> ¿Sentir inseguridad significa no ser capaz?</li>
+                            <li><strong>Cuantificador Universal:</strong> "todos me rechazan" -> ¿Todos? ¿Incluso el compañero que te trajo café hoy?</li>
+                        </ul>
+                    </div>
+                    <div id="lab-3" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Meta-Modelo Trainer"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Identifica el patrón del Meta-Modelo y selecciona la pregunta de recuperación (challenge) adecuada.</p>
+                        
+                        <div id="meta-trainer" class="p-6 bg-[var(--bg-main)] rounded border border-[var(--border-color)]">
+                            <p class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-1">Frase del Cliente:</p>
+                            <p id="meta-frase" class="text-lg font-medium mb-4 min-h-[3rem]">Cargando...</p>
+                            
+                            <p class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-1">Paso 1: ¿Qué patrón es?</p>
+                            <div id="meta-opts-patron" class="grid md:grid-cols-2 gap-2 mb-4"></div>
+                            
+                            <div id="meta-step-2" class="hidden">
+                                <p class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-1">Paso 2: Selecciona el Challenge correcto:</p>
+                                <div id="meta-opts-challenge" class="grid md:grid-cols-1 gap-2"></div>
+                            </div>
+
+                            <div id="meta-feedback" class="mt-4 p-3 rounded text-sm hidden"></div>
+                            <button id="meta-next" class="mt-4 hidden bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded transition-colors">Siguiente Frase</button>
+                        </div>
+                    </div>
+                    <div id="quiz-3" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-3" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-3" class="font-bold text-primary-600 dark:text-accent-400">0/12</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Estructura Profunda:</dt><dd class="text-[var(--text-muted)]">El significado completo e intuido de una experiencia, previo a su reducción al lenguaje.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Estructura Superficial:</dt><dd class="text-[var(--text-muted)]">Lo que decimos; la versión reducida y transformada de la estructura profunda.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Omisión:</dt><dd class="text-[var(--text-muted)]">Borrar partes de la experiencia en el lenguaje.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Generalización:</dt><dd class="text-[var(--text-muted)]">Aplicar una regla específica a todas las situaciones.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Distorsión:</dt><dd class="text-[var(--text-muted)]">Alterar la relación entre sujeto y objeto, asumiendo conexiones no reales.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Nominalización:</dt><dd class="text-[var(--text-muted)]">Un proceso (verbo) congelado en el tiempo y expresado como sustantivo.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Operador Modal:</dt><dd class="text-[var(--text-muted)]">Palabras de posibilidad (poder) o necesidad (deber) que limitan opciones.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Equivalencia Compleja:</dt><dd class="text-[var(--text-muted)]">Asumir que dos experiencias diferentes significan lo mismo (A significa B).</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Lectura de Mente:</dt><dd class="text-[var(--text-muted)]">Asumir que se sabe lo que el otro piensa o siente sin evidencia.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Causa-Efecto:</dt><dd class="text-[var(--text-muted)]">Creer que la conducta de otra persona causa directamente nuestra emoción.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Challenge:</dt><dd class="text-[var(--text-muted)]">Pregunta de recuperación del Meta-Modelo para restaurar la información perdida.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Cuantificador Universal:</dt><dd class="text-[var(--text-muted)]">Palabras que generalizan sin excepción (todos, nadie, siempre, nunca).</dd></div>
+                        </dl>
+                    </div>
+                </section>
+                                <!-- ================= INICIO MÓDULO 4 ================= -->
+                <section id="modulo-4" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-4">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 4</span>
+                        <h2 id="title-mod-4" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">El Modelo Milton y Patrones Hipnóticos</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">El inverso estructural del Meta-Modelo. Estudiamos el lenguaje artefactualmente vago de Milton Erickson para sortear el filtro del consciente y inducir trance.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">4.1 - 4.2. Contexto y Diferencia con el Meta-Modelo</h3>
+                            <p>Extraído de Milton Erickson. Mientras el Meta-Modelo busca especificidad para recuperar información (reduciendo el trance), el Modelo Milton usa la vaguedad para que el oyente deba buscar significado en su propia experiencia interna, induciendo trance hipnótico.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">4.3. Catálogo de Patrones</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Ambigüedad</h4>
+                                    <ul class="list-disc pl-4 text-xs space-y-1 text-[var(--text-muted)] mt-2">
+                                        <li><strong>Fonológica:</strong> Palabras con doble sentido (Zorro/Zorro).</li>
+                                        <li><strong>Sintáctica:</strong> Función gramatical incierta ("El perro muerde al hombre con el palo").</li>
+                                        <li><strong>Puntuación:</strong> Fusión de dos frases sin pausa.</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Sugestión Indirecta</h4>
+                                    <ul class="list-disc pl-4 text-xs space-y-1 text-[var(--text-muted)] mt-2">
+                                        <li><strong>Comandos incrustados:</strong> Órdenes ocultas en frases ("No es necesario que te *relajes*").</li>
+                                        <li><strong>Doble vínculo:</strong> Ilusión de elección ("¿Quieres entrar en trance ahora o en un minuto?").</li>
+                                        <li><strong>Tag questions:</strong> Validación al final ("Puedes hacerlo, ¿no?").</li>
+                                        <li><strong>Negación:</strong> "No pienses en un elefante rosa".</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Sintaxis rota:</strong> Confundir ambigüedad de puntuación con simple mala gramática que confunde sin dirección terapéutica.</li>
+                            <li><strong>Comandos no marcados:</strong> Decir comandos incrustados sin cambiar el tono de voz o ritmo, perdiendo el efecto subliminal.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Metáfora Isomórfica</h3>
+                        <p class="mb-2 text-sm"><strong>Problema:</strong> Fobia a hablar en público (miedo al juicio).</p>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded text-sm mb-4 border border-[var(--border-color)] italic">
+                            "Conozco a un jardinero que tenía una rosa maravillosa, pero temía mostrarla porque pensaba que los espinos la hacían imperfecta. Un día, una tormenta la sacudió, y al ponerse el sol, el jardinero vio que las gotas de agua atrapadas en los pétalos *reflejaban la luz brillantemente*, haciéndola más fuerte y resplandeciente que antes. Y puedes *permitirte brillar* ahora, sabiendo que la tensión es solo agua esperando el sol."
+                        </div>
+                        <p class="text-sm">Los comandos incrustados están en <strong>cursiva</strong>. La estructura de la rosa (vehículo) es isomórfica al orador (tenor).</p>
+                    </div>
+                    <div id="lab-4" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Metaforizador"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Construye una metáfora terapéutica básica seleccionando los elementos isomórficos.</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Problema del Cliente</label>
+                                    <select id="meta-problema" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)]">
+                                        <option value="miedo a fracasar">Miedo a fracasar</option>
+                                        <option value="bloqueo creativo">Bloqueo creativo</option>
+                                        <option value="ansiedad social">Ansiedad social</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Dominio Isomórfico (Vehículo)</label>
+                                    <select id="meta-dominio" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)]">
+                                        <option value="un árbol en invierno">Un árbol en invierno</option>
+                                        <option value="un río finding su camino">Un río finding su camino</option>
+                                        <option value="una oruga en capullo">Una oruga en capullo</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Recurso a instalar</label>
+                                    <select id="meta-recurso" class="w-full p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)]">
+                                        <option value="paciencia y confianza">Paciencia y confianza</option>
+                                        <option value="fluidez y adaptabilidad">Fluidez y adaptabilidad</option>
+                                        <option value="transformación y valentía">Transformación y valentía</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-primary-50 dark:bg-primary-950/30 rounded border border-primary-200 dark:border-primary-800">
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400 mb-2">Metáfora Generada:</h4>
+                                <p id="meta-output" class="text-sm text-[var(--text-main)] min-h-[100px]"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-4" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-4" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-4" class="font-bold text-primary-600 dark:text-accent-400">0/10</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Trance:</dt><dd class="text-[var(--text-muted)]">Estado de focalización atencional interna.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Isomorfismo:</dt><dd class="text-[var(--text-muted)]">Coincidencia estructural entre el problema y la metáfora.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Doble vínculo:</dt><dd class="text-[var(--text-muted)]">Ilusión de elección donde todas las opciones llevan al objetivo.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Comando incrustado:</dt><dd class="text-[var(--text-muted)]">Orden oculta en una frase más larga.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- ================= INICIO MÓDULO 5 ================= -->
+                <section id="modulo-5" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-5">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 5</span>
+                        <h2 id="title-mod-5" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Anclaje y Recursos Emocionales</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">El mecanismo de condicionamiento pavloviano aplicado a estados emocionales. Cómo asociar estímulos únicos a recursos poderosos.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">5.1 - 5.2. Fundamento y Componentes</h3>
+                            <p class="mb-3">Basado en el condicionamiento pavloviano, un ancla asocia un estímulo único a un estado emocional. Componentes del anclaje eficaz:</p>
+                            <ul class="list-disc pl-6 space-y-2 text-[var(--text-main)]">
+                                <li><strong>Intensidad:</strong> El estado debe vivirse plenamente.</li>
+                                <li><strong>Timing:</strong> Aplicar el estímulo justo en el pico de la experiencia.</li>
+                                <li><strong>Unicidad:</strong> El estímulo debe ser específico (ej. tocar un nudillo, no todo el brazo).</li>
+                                <li><strong>Replicabilidad:</strong> Poder reproducir el estímulo exacto.</li>
+                            </ul>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">5.6. Técnicas Avanzadas</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Stacking (Apilado)</h4>
+                                    <p class="text-sm mt-1">Acumular varios recuerdos de recurso en un mismo ancla para potenciar su efecto.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">Colapso de Anclas</h4>
+                                    <p class="text-sm mt-1">Disparar ancla limitante y ancla de recurso simultáneamente. El recurso neutraliza el límite.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Timing tardío:</strong> Aplicar el ancla cuando el estado ya está decayendo, anclando la transición de bajada.</li>
+                            <li><strong>Ancla difusa:</strong> Usar un estímulo común que el cerebro tiene saturado.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Círculo de Excelencia</h3>
+                        <p class="text-sm">Protocolo para ansiedad pre-examen: 1. Dibujar círculo en suelo. 2. Recordar máxima confianza. 3. En pico, pisar círculo. 4. Salir y romper estado. 5. Apilar (Stacking) con otros 2 recursos. 6. Prueba futura: Imaginar examen pisando círculo.</p>
+                    </div>
+                    <div id="lab-5" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Simulador de Colapso de Anclas"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Carga el ancla de recurso y el ancla limitante, luego dispara el colapso para ver cómo el recurso envuelve al límite.</p>
+                        <div class="flex flex-col items-center gap-6">
+                            <div class="flex gap-8">
+                                <div class="text-center">
+                                    <button id="colapsar-recurso" class="px-4 py-2 bg-emerald-500 text-white rounded font-bold hover:bg-emerald-600">Cargar Recurso</button>
+                                    <div class="mt-2 w-16 h-16 mx-auto rounded-full bg-emerald-200 dark:bg-emerald-900 flex items-center justify-center">
+                                        <span id="nivel-recurso" class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">0%</span>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button id="colapsar-limite" class="px-4 py-2 bg-red-500 text-white rounded font-bold hover:bg-red-600">Cargar Límite</button>
+                                    <div class="mt-2 w-16 h-16 mx-auto rounded-full bg-red-200 dark:bg-red-900 flex items-center justify-center">
+                                        <span id="nivel-limite" class="text-2xl font-bold text-red-700 dark:text-red-300">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="colapsar-disparar" class="px-8 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-700 disabled:opacity-50" disabled>Disparar Colapso</button>
+                            <div id="colapso-visual" class="w-48 h-48 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center text-center text-xs font-bold p-4 transition-all duration-700">
+                                Esperando carga...
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-5" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-5" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-5" class="font-bold text-primary-600 dark:text-accent-400">0/10</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Ancla:</dt><dd class="text-[var(--text-muted)]">Estímulo asociado a un estado emocional.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Stacking:</dt><dd class="text-[var(--text-muted)]">Acumular recursos en un mismo ancla.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Colapso:</dt><dd class="text-[var(--text-muted)]">Disparar dos anclas simultáneamente.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Romper estado:</dt><dd class="text-[var(--text-muted)]">Distraer para salir de un estado emocional.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- ================= INICIO MÓDULO 6 ================= -->
+                <section id="modulo-6" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-6">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 6</span>
+                        <h2 id="title-mod-6" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Estrategias TOTE y Niveles Neurológicos</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">Los modelos jerárquicos de cambio de la PNL. Cómo organizamos el pensamiento (TOTE) y la estructura de nuestra identidad (Niveles de Dilts).</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">6.1. Modelo TOTE</h3>
+                            <p>Miller, Galanter y Pribram. Las estrategias mentales siguen un bucle: <strong>Test</strong> (comparar estado actual vs deseado) -> <strong>Operate</strong> (acción para reducir brecha) -> <strong>Test</strong> (re-evaluar) -> <strong>Exit</strong> (salir cuando coinciden).</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">6.6. Niveles Neurológicos de Dilts</h3>
+                            <p class="mb-4">Modelo jerárquico de cambio. Un cambio en un nivel superior afecta a los inferiores; un cambio inferior rara vez sostiene el superior.</p>
+                            <div class="mermaid bg-[var(--bg-main)] p-4 rounded">
+                                graph TD
+                                    A[Entorno: Dónde/Cuándo] --> B[Comportamiento: Qué hago]
+                                    B --> C[Capacidades: Cómo lo hago]
+                                    C --> D[Creencias/Valores: Por qué]
+                                    D --> E[Identidad: Quién soy]
+                                    E --> F[Trascendencia: Para quién/qué más]
+                                    style A fill:#ede9fe,stroke:#7c3aed
+                                    style B fill:#ddd6fe,stroke:#7c3aed
+                                    style C fill:#c4b5fd,stroke:#7c3aed
+                                    style D fill:#a78bfa,stroke:#7c3aed,color:#fff
+                                    style E fill:#8b5cf6,stroke:#7c3aed,color:#fff
+                                    style F fill:#7c3aed,stroke:#7c3aed,color:#fff
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Confundir Niveles:</strong> "Soy un fracasado" (Identidad) vs "No estudié ayer" (Comportamiento). Mezclar niveles genera culpa estéril.</li>
+                            <li><strong>Terapia en nivel equivocado:</strong> Intentar cambiar la identidad cuando el problema es de entorno.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Procrastinación</h3>
+                        <p class="text-sm">Diagnóstico: El problema de "no estudiar" (Comportamiento) está anclado en la creencia "debe ser perfecto" (Creencias) y la identidad "soy un fraude" (Identidad). Intervención con Sleight of Mouth (Contra-ejemplo): "¿Nunca has terminado algo a tiempo sin que fuera perfecto?". Esto rompe la equivalencia compleja en nivel de creencias, desbloqueando la capacidad.</p>
+                    </div>
+                    <div id="lab-6" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Diagnóstico de Niveles Neurológicos"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Lee la frase y diagnostica en qué nivel neurológico de Dilts está operando la persona.</p>
+                        <div id="niveles-trainer" class="p-6 bg-[var(--bg-main)] rounded border border-[var(--border-color)]">
+                            <p id="nivel-frase" class="text-lg font-medium mb-4 min-h-[3rem]">Cargando...</p>
+                            <div id="nivel-opts" class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4"></div>
+                            <div id="nivel-feedback" class="mt-2 text-sm hidden"></div>
+                            <button id="nivel-next" class="mt-4 hidden bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded">Siguiente</button>
+                        </div>
+                    </div>
+                    <div id="quiz-6" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-6" class="space-y-6"></div>
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-6" class="font-bold text-primary-600 dark:text-accent-400">0/12</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">TOTE:</dt><dd class="text-[var(--text-muted)]">Test-Operate-Test-Exit. Bucle de estrategia mental.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Niveles Neurológicos:</dt><dd class="text-[var(--text-muted)]">Jerarquía de experiencia de Dilts.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Sleight of Mouth:</dt><dd class="text-[var(--text-muted)]">Patrones para desarmar creencias.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Contra-ejemplo:</dt><dd class="text-[var(--text-muted)]">Patrón que busca una excepción a la regla de la creencia.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+                <!-- ================= INICIO MÓDULO 7 ================= -->
+                <section id="modulo-7" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-7">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 7</span>
+                        <h2 id="title-mod-7" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Rapport, Calibración y Posiciones Perceptuales</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">La danza interpersonal. Cómo establecer confianza profunda (rapport), leer micro-cambios (calibración) y cambiar de perspectiva.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">7.1 - 7.4. Rapport y Matching</h3>
+                            <p class="mb-3">El rapport es el puente de confianza inconsciente. Se logra mediante <strong>Matching</strong> (igualar postura, gesto, voz, respiración, predicados) y <strong>Mirroring</strong> (reflejar como un espejo). El <strong>Cross-over matching</strong> consiste en igualar el ritmo de un canal con otro (ej. mover el dedo al ritmo de su respiración).</p>
+                            <div class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded text-sm">
+                                <strong>Pacing y Leading:</strong> Primero acompasas (pacing) la realidad actual del cliente. Una vez en sintonía, puedes guiarlo (leading) hacia otro estado. Sin pacing, el leading genera resistencia.
+                            </div>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">7.5. Calibración</h3>
+                            <p>Capacidad de notar cambios mínimos en la fisiología del otro sin interpretar. Diferencia entre alucinar ("parece enfadado") y calibrar ("su mandíbula se tensó y la respiración se acortó"). Es la base de la lectura no verbal objetiva.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">7.7. Posiciones Perceptuales</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">1ª Posición (Asociado)</h4>
+                                    <p class="text-sm mt-1">En tu propio cuerpo, viendo por tus ojos. Centrado en el "Yo" y tus emociones.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">2ª Posición (Perceptual)</h4>
+                                    <p class="text-sm mt-1">En el cuerpo del otro. Viéndote a ti mismo desde sus ojos. Empatía pura.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">3ª Posición (Observador)</h4>
+                                    <p class="text-sm mt-1">Desasociado. Viendo a los dos interactuando desde fuera. Neutral, objetivo.</p>
+                                </div>
+                                <div class="p-4 rounded bg-primary-50 dark:bg-slate-900/50 border border-primary-200 dark:border-slate-700">
+                                    <h4 class="font-bold text-accent-600 dark:text-accent-400">4ª Posición (Sistémica)</h4>
+                                    <p class="text-sm mt-1">El "Nosotros". El sistema completo o equipo interactuando.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Cariatura (Caricaturizar):</strong> Imitar los gestos del cliente de forma exagerada y obvia, rompiendo el rapport en lugar de crearlo.</li>
+                            <li><strong>Leading prematuro:</strong> Intentar guiar al cliente a la calma antes de haber igualado su estado de ansiedad (pacing).</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: El Meta-Mirror</h3>
+                        <p class="text-sm">Un empleado está furioso con su jefe. Se usa el Meta-Mirror: 1ª pos (Siente la rabia legitima) -> 3ª pos (Ve la dinámica desde fuera sin emoción) -> 2ª pos (Se pone en el lugar del jefe, descubre que actúa por presión de arriba, no por desprecio) -> 4ª pos (Entiende que el conflicto es sistémico). Vuelve a 1ª pos con nuevos recursos para comunicarse.</p>
+                    </div>
+                    <div id="lab-7" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Posiciones Perceptuales"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Recorre las 4 posiciones perceptuales ante un conflicto. Escribe tu perspectiva en cada una para integrar la experiencia.</p>
+                        <div class="p-6 bg-[var(--bg-main)] rounded border border-[var(--border-color)]">
+                            <p id="pos-escenario" class="text-lg font-medium mb-4 text-center">Escenario: Tu compañero no te entregó su parte del trabajo a tiempo.</p>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400">1ª Posición (¿Qué sientes tú?):</label>
+                                    <textarea id="pos-1" class="w-full mt-1 p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-sm" rows="2"></textarea>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400">2ª Posición (¿Qué siente él/ella?):</label>
+                                    <textarea id="pos-2" class="w-full mt-1 p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-sm" rows="2"></textarea>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400">3ª Posición (Vista objetiva desde fuera):</label>
+                                    <textarea id="pos-3" class="w-full mt-1 p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-sm" rows="2"></textarea>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-accent-400">4ª Posición (¿Qué necesita el equipo/sistema?):</label>
+                                    <textarea id="pos-4" class="w-full mt-1 p-2 rounded bg-white dark:bg-slate-900 border border-[var(--border-color)] text-sm" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <button id="pos-integrar" class="mt-4 w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded">Integrar Perspectivas</button>
+                            <div id="pos-result" class="mt-4 p-4 rounded bg-emerald-50 dark:bg-emerald-900/30 text-sm hidden"></div>
+                        </div>
+                    </div>
+                    <div id="quiz-7" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-7" class="space-y-6"></div>
+                        <div class="mt-6 text-center"><p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-7" class="font-bold text-primary-600 dark:text-accent-400">0/10</span></p></div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Rapport:</dt><dd class="text-[var(--text-muted)]">Puente de confianza inconsciente.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Matching:</dt><dd class="text-[var(--text-muted)]">Igualar postura o fisiología.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Pacing:</dt><dd class="text-[var(--text-muted)]">Acompasar la realidad del otro.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Calibración:</dt><dd class="text-[var(--text-muted)]">Observar cambios mínimos objetivos.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <!-- ================= INICIO MÓDULO 8 ================= -->
+                <section id="modulo-8" class="modulo-container mb-20 fade-in" aria-labelledby="title-mod-8">
+                    <header class="mb-8 border-b border-[var(--border-color)] pb-4">
+                        <span class="text-sm font-bold text-primary-600 dark:text-accent-400 tracking-widest uppercase">Módulo 8</span>
+                        <h2 id="title-mod-8" class="text-3xl md:text-4xl font-extrabold text-[var(--text-main)] mt-1">Aplicaciones, Técnicas Avanzadas y Ética</h2>
+                        <p class="text-[var(--text-muted)] mt-2 max-w-3xl">Técnicas de cambio rápido (Swish, Fast Phobia), líneas de tiempo, aplicaciones profesionales y el marco ético de la PNL.</p>
+                    </header>
+                    <div class="space-y-8">
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">8.1. Línea del Tiempo</h3>
+                            <p>Cómo codificamos el tiempo espacialmente. <strong>In Time:</strong> El pasado está detrás, el futuro delante, uno está "dentro" del tiempo (asociado). <strong>Through Time:</strong> El tiempo es una línea frente a uno (pasado izq, futuro der). Uno está "fuera" del tiempo (disociado), mejor para planificación.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">8.2. Swish Pattern</h3>
+                            <p>Técnica para romper patrones automáticos no deseados. Se toma la imagen disparadora (asociada) y se reemplaza rápidamente por la imagen del yo ideal (disociada). El "Swish" visual reinicia el cerebro.</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">8.4. Fast Phobia Cure</h3>
+                            <p>Técnica de doble disociación para traumas/fobias. Ver el trauma en pantalla de cine en blanco y negro, viéndose a sí mismo viendo la película, luego rebobinar rápido en color (reverse swish).</p>
+                        </article>
+                        <article class="bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                            <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">8.10. Ética y Ecología</h3>
+                            <p>Toda intervención PNL debe pasar el test ecológico: "¿Cómo afectará este cambio al resto de mi vida y relaciones?". La PNL exige transparencia y uso constructivo, evitando imponer valores.</p>
+                        </article>
+                    </div>
+                    <div class="mt-8 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-700 dark:text-red-400">⚠️ Errores Típicos</h3>
+                        <ul class="space-y-3 list-disc pl-5 text-[var(--text-main)]">
+                            <li><strong>Swish invertido:</strong> Poner la imagen del yo ideal de fondo y la disparadora al frente, reforzando el problema.</li>
+                            <li><strong>Ecología ignorada:</strong> Eliminar un síntoma (ej. ansiedad) sin revisar qué función positiva cumplía (ej. evitar peligros), causando un "efecto rebote" sistémico.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-emerald-700 dark:text-emerald-400">📖 Caso Resuelto: Swish para Uñas</h3>
+                        <p class="text-sm">1. Imagen disparadora: Mano yendo a la boca (asociada). 2. Imagen del yo deseado: Manos relajadas, uñas perfectas (disociada). 3. Procedimiento: Ver imagen disparadora. Pequeña imagen brillante del yo deseado en esquina inferior izquierda. Hacer "Swish" (cambio rápido) 5-7 veces en menos de un segundo, borrando el disparador.</p>
+                    </div>
+                    <div id="lab-8" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border-2 border-primary-300 dark:border-primary-700">
+                        <h3 class="text-xl font-bold mb-3 text-primary-700 dark:text-primary-300">🧪 Laboratorio: "Time Line Explorer"</h3>
+                        <p class="mb-4 text-sm text-[var(--text-muted)]">Visualiza cómo experimentas el tiempo. Selecciona tu configuración para entender tu percepción espacial.</p>
+                        <div class="flex flex-col items-center gap-6">
+                            <div class="flex gap-4">
+                                <button id="tl-in-time" class="px-4 py-2 bg-primary-500 text-white rounded font-bold hover:bg-primary-600">In Time</button>
+                                <button id="tl-through-time" class="px-4 py-2 bg-accent-500 text-white rounded font-bold hover:bg-accent-600">Through Time</button>
+                            </div>
+                            <div class="w-full h-48 bg-[var(--bg-main)] rounded border border-[var(--border-color)] flex items-center justify-center relative overflow-hidden">
+                                <div id="tl-visual" class="w-full h-full flex items-center justify-center text-sm text-[var(--text-muted)] p-4 text-center">
+                                    Selecciona una opción para visualizar.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-8" class="mt-8 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow-sm border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-4 text-primary-700 dark:text-primary-300">📝 Quiz de Autoevaluación</h3>
+                        <div id="quiz-container-8" class="space-y-6"></div>
+                        <div class="mt-6 text-center"><p class="text-sm text-[var(--text-muted)]">Tu puntuación: <span id="quiz-score-8" class="font-bold text-primary-600 dark:text-accent-400">0/12</span></p></div>
+                    </div>
+                    <div class="mt-8 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-lg border border-[var(--border-color)]">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--text-main)]">📖 Glosario del Módulo</h3>
+                        <dl class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">In Time:</dt><dd class="text-[var(--text-muted)]">Estar dentro del tiempo, pasado atrás, futuro adelante.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Through Time:</dt><dd class="text-[var(--text-muted)]">Tiempo en línea frente a uno, disociado.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Swish:</dt><dd class="text-[var(--text-muted)]">Cambio rápido de imagen submodal para romper patrones.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Fast Phobia:</dt><dd class="text-[var(--text-muted)]">Técnica de doble disociación para traumas.</dd></div>
+                            <div><dt class="font-semibold text-primary-700 dark:text-accent-400">Ecología:</dt><dd class="text-[var(--text-muted)]">Revisión del impacto sistémico de un cambio.</dd></div>
+                        </dl>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts Base -->
+    <script>
+        // ==========================================
+        // SISTEMA CORE: Persistencia y Estado
+        // ==========================================
+        const STORAGE_KEY = 'edu_platform_pnl';
+        let appState = {
+            theme: 'light',
+            readSections: [],
+            quizScores: {}
+        };
+
+        try {
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            if (savedState) {
+                appState = JSON.parse(savedState);
+            }
+        } catch (e) {
+            console.error("Error al cargar el estado", e);
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } catch (e) {
+                console.error("Error al guardar el estado", e);
+            }
+        }
+
+        // ==========================================
+        // SISTEMA CORE: Modo Oscuro
+        // ==========================================
+        function applyTheme() {
+            const isDark = appState.theme === 'dark' || (!('theme' in appState) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', isDark);
+            document.getElementById('icon-moon').classList.toggle('hidden', isDark);
+            document.getElementById('icon-sun').classList.toggle('hidden', !isDark);
+        }
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            appState.theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme();
+            saveState();
+        });
+        applyTheme();
+
+        // ==========================================
+        // SISTEMA CORE: Navegación Móvil
+        // ==========================================
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const menuBtn = document.getElementById('menu-btn');
+
+        function toggleSidebar(forceClose = false) {
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            const shouldOpen = forceClose ? false : !isOpen;
+            sidebar.classList.toggle('-translate-x-full', !shouldOpen);
+            overlay.classList.toggle('hidden', !shouldOpen);
+            menuBtn.setAttribute('aria-expanded', shouldOpen);
+        }
+
+        menuBtn.addEventListener('click', () => toggleSidebar());
+        overlay.addEventListener('click', () => toggleSidebar(true));
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) toggleSidebar(true);
+            });
+        });
+
+        // ==========================================
+        // SISTEMA CORE: Scrollspy y Progreso
+        // ==========================================
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.modulo-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+
+        function updateProgress(sectionId) {
+            if (!sectionId) return;
+            const cleanId = sectionId.replace('#', '');
+            if (!appState.readSections.includes(cleanId)) {
+                appState.readSections.push(cleanId);
+                saveState();
+            }
+            const totalSections = 9; // Mod 0, 1, 2, 3, 4, 5, 6, 7, 8
+            const progress = (appState.readSections.length / totalSections) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                    updateProgress(id);
+                }
+            });
+        }, { rootMargin: '-30% 0px -60% 0px' });
+
+        sections.forEach(section => observer.observe(section));
+
+        // ==========================================
+        // SISTEMA CORE: Renderizado Perezoso
+        // ==========================================
+        window.processDynamicContent = function(container) {
+            try {
+                if (window.renderMathInElement) {
+                    renderMathInElement(container, {
+                        delimiters: [
+                            {left: '\\(', right: '\\)', display: false},
+                            {left: '\\[', right: '\\]', display: true}
+                        ],
+                        throwOnError: false
+                    });
+                }
+                if (window.mermaid) {
+                    const mermaidBlocks = container.querySelectorAll('.mermaid');
+                    mermaidBlocks.forEach((block, index) => {
+                        if (!block.getAttribute('data-processed')) {
+                            block.setAttribute('data-processed', 'true');
+                            const id = `mermaid-graph-${Date.now()}-${index}`;
+                            block.id = id;
+                        }
+                    });
+                    window.mermaid.run({ nodes: mermaidBlocks });
+                }
+                if (window.Prism) {
+                    window.Prism.highlightAllUnder(container);
+                }
+            } catch (e) {
+                console.error("Error procesando contenido dinámico:", e);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialProgress = (appState.readSections.length / 9) * 100;
+            progressBar.style.width = `${initialProgress}%`;
+            progressText.textContent = `${Math.round(initialProgress)}%`;
+        });
+        
+        // ==========================================
+        // SCRIPTS MÓDULO 1
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod1Container = document.getElementById('modulo-1');
+                if (window.processDynamicContent) window.processDynamicContent(mod1Container);
+
+                const labEmocion = document.getElementById('lab-emocion');
+                const labCreencia = document.getElementById('lab-creencia');
+                const labVak = document.getElementById('lab-vak');
+                const labOutput = document.getElementById('lab-output');
+
+                function updateLab() {
+                    const emocion = labEmocion.value;
+                    const creencia = labCreencia.value;
+                    const vak = labVak.value;
+                    let visualText = "", auditivoText = "", kinestesicoText = "", conclusion = "";
+
+                    if (emocion === 'ansioso' && creencia === 'amenaza') {
+                        visualText = "Ves cómo te mira de reojo y desvía la mirada rápidamente.";
+                        auditivoText = "Escuchas el eco de sus pasos como si estuviera huyendo de ti.";
+                        kinestesicoText = "Sientes un nudo en el estómago y tensión en los hombros.";
+                        conclusion = "Interpretación: 'Está enfadado conmigo, he hecho algo mal.'";
+                    } else if (emocion === 'relajado' && creencia === 'oportunidad') {
+                        visualText = "Ves que mira su teléfono absorto mientras camina.";
+                        auditivoText = "Apenas registras el sonido de su caminar.";
+                        kinestesicoText = "Sientes ligereza en tu paso, sin alteración.";
+                        conclusion = "Interpretación: 'Está distraído. Le saludaré luego.'";
+                    } else if (emocion === 'irritado' && creencia === 'juicio') {
+                        visualText = "Ves su postura arrogante, levantando la barbilla para ignorarte.";
+                        auditivoText = "Escuchas un suspiro de desdén en el aire.";
+                        kinestesicoText = "Sientes calor en la cara y puños cerrados.";
+                        conclusion = "Interpretación: 'Se cree mejor que yo, qué arrogante.'";
+                    } else {
+                        visualText = "Notas su expresión facial neutra y su mirada al frente.";
+                        auditivoText = "Escuchas el ambiente normal de la oficina de fondo.";
+                        kinestesicoText = "Sientes una breve pausa en tu respiración.";
+                        conclusion = "Interpretación: 'Tal vez no me vio. Es ambiguo.'";
+                    }
+
+                    let finalText = "";
+                    if (vak === 'visual') finalText = visualText + " " + conclusion;
+                    if (vak === 'auditivo') finalText = auditivoText + " " + conclusion;
+                    if (vak === 'kinestesico') finalText = kinestesicoText + " " + conclusion;
+
+                    labOutput.innerHTML = `<p>${finalText}</p><p class="mt-2 text-xs italic text-[var(--text-muted)]">*Este es un ejemplo de cómo tus filtros construyen la realidad, no de la realidad en sí.</p>`;
+                }
+
+                [labEmocion, labCreencia, labVak].forEach(el => el.addEventListener('change', updateLab));
+                updateLab();
+
+                const quizData1 = [
+                    { q: "¿Qué significa el axioma 'El mapa no es el territorio'?", options: ["Que los mapas físicos son imprecisos.", "Que nuestra representación interna no es la realidad objetiva misma.", "Que debemos viajar para conocer el mundo.", "Que el lenguaje es más real que la materia."], correct: 1, feedback: "Nuestra representación (mapa) es una edición filtrada de la realidad objetiva (territorio)." },
+                    { q: "¿Quiénes son los cofundadores de la PNL?", options: ["Milton Erickson y Virginia Satir", "Robert Dilts y Judith DeLozier", "Richard Bandler y John Grinder", "Paul Watzlawick y Gregory Bateson"], correct: 2, feedback: "Bandler y Grinder la fundaron en UC Santa Cruz entre 1972 y 1975." },
+                    { q: "En el axioma 'El significado de la comunicación es la respuesta que obtienes', si el receptor no entiende, la responsabilidad primaria recae en:", options: ["El receptor, por no prestar atención.", "El emisor, por no codificar el mensaje en el mapa del receptor.", "El canal de comunicación.", "Ninguna, la comunicación es azarosa."], correct: 1, feedback: "La PNL enfatiza la responsabilidad del emisor para calibrar y ajustar su comunicación." },
+                    { q: "¿Qué disciplina aportó el concepto de 'Estructura Profunda vs Superficial'?", options: ["La Cibernética de Bateson", "La Semántica General de Korzybski", "La Gramática Transformacional de Chomsky", "La Terapia Gestalt de Perls"], correct: 2, feedback: "Chomsky postuló que lo que decimos (superficial) es una transformación de un significado más rico (profundo)." },
+                    { q: "Las 'Presuposiciones' de la PNL deben entenderse como:", options: ["Leyes neurobiológicas comprobadas", "Verdades absolutas universales", "Hipótesis operativas que, al asumirlas, generan flexibilidad", "Técnicas de manipulación coercitiva"], correct: 2, feedback: "No son leyes científicas, sino axiomas pragmáticos para enmarcar la intervención." },
+                    { q: "¿Cuál de los siguientes NO fue uno de los tres 'magos' modelados originalmente?", options: ["Fritz Perls", "Milton Erickson", "Carl Rogers", "Virginia Satir"], correct: 2, feedback: "Carl Rogers no fue uno de los modelados inicialmente; los tres fueron Perls, Satir y Erickson." },
+                    { q: "El 'Modelado' en PNL se define como:", options: ["Imitar la ropa y postura de un exitoso.", "El proceso de extraer y replicar la estructura subjetiva de la excelencia.", "Analizar la infancia del paciente.", "Aplicar hipnosis profunda para borrar hábitos."], correct: 1, feedback: "Es el método nuclear: descubrir cómo un experto organiza su neurología, lenguaje y programas internos." },
+                    { q: "La 'Ley de la Variedad Requerida' se asocia con:", options: ["La rigidez del terapeuta", "La inhibición del paciente", "La flexibilidad conductual y de comunicación", "El uso de la mente consciente analítica"], correct: 2, feedback: "En un sistema interactivo, quien tiene más opciones de respuesta tiene el control de la dinámica." }
+                ];
+
+                const quizContainer1 = document.getElementById('quiz-container-1');
+                const scoreDisplay1 = document.getElementById('quiz-score-1');
+                let score1 = 0;
+                let answered1 = new Array(quizData1.length).fill(false);
+
+                quizData1.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `
+                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
+                        <div class="space-y-2" id="q1-opts-${index}">
+                            ${item.options.map((opt, i) => `<button class="quiz-btn-1 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
+                        </div>
+                        <div id="q1-feedback-${index}" class="mt-2 text-sm hidden"></div>
+                    `;
+                    quizContainer1.appendChild(qDiv);
+                });
+
+                document.querySelectorAll('.quiz-btn-1').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q);
+                        const optIdx = parseInt(this.dataset.opt);
+                        if (answered1[qIdx]) return;
+                        answered1[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q1-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q1-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData1[qIdx].correct;
+                        buttons.forEach((b, i) => {
+                            b.disabled = true;
+                            if (i === quizData1[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
+                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
+                            else b.classList.add('opacity-50');
+                        });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) {
+                            score1++;
+                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData1[qIdx].feedback}</span>`;
+                        } else {
+                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData1[qIdx].feedback}</span>`;
+                        }
+                        scoreDisplay1.textContent = `${score1}/${quizData1.length}`;
+                        if (window.appState) { window.appState.quizScores['mod1'] = score1; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 1:", e); }
+        })();
+
+        // ==========================================
+        // SCRIPTS MÓDULO 2
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod2Container = document.getElementById('modulo-2');
+                if (window.processDynamicContent) window.processDynamicContent(mod2Container);
+
+                const dictionaries = {
+                    V: ['veo', 'ver', 'mirar', 'mira', 'claro', 'oscuro', 'brillante', 'imagen', 'enfocar', 'enfoque', 'perspectiva', 'color', 'neblinoso', 'apariencia', 'ilustra', 'panorama', 'visible', 'dibujo', 'imaginar', 'imagino'],
+                    A: ['escucho', 'escuchar', 'oigo', 'oye', 'sonido', 'ruido', 'tono', 'resuena', 'resonar', 'dime', 'hablar', 'hablo', 'voz', 'agudo', 'sordo', 'grita', 'ritmo', 'armonía', 'armónico', 'cantar'],
+                    K: ['siento', 'sentir', 'sensación', 'tocar', 'toco', 'pesado', 'ligero', 'frío', 'calor', 'tensión', 'relajado', 'duro', 'suave', 'áspero', 'fluido', 'sólido', 'presión', 'ahogo', 'nudo', 'cuerpo'],
+                    Ad: ['pienso', 'pensar', 'entiendo', 'lógico', 'ilógico', 'sentido', 'proceso', 'aprendo', 'experiencia', 'concepto', 'razón', 'analizo', 'deduzco', 'concluyo', 'sé', 'saber']
+                };
+
+                function normalize(word) { return word.toLowerCase().replace(/[.,;:!?"'()]/g, ''); }
+
+                document.getElementById('vak-analyze-btn').addEventListener('click', function() {
+                    const text = document.getElementById('vak-input').value;
+                    const words = text.split(/\s+/).map(normalize);
+                    let counts = { V: 0, A: 0, K: 0, Ad: 0 };
+                    let total = 0;
+                    words.forEach(word => {
+                        for (const key in dictionaries) {
+                            if (dictionaries[key].includes(word) || dictionaries[key].includes(word.slice(0,-1))) {
+                                counts[key]++;
+                                total++;
+                                break;
+                            }
+                        }
+                    });
+                    let pcts = { V: 0, A: 0, K: 0, Ad: 0 };
+                    if (total > 0) {
+                        pcts.V = Math.round((counts.V / total) * 100);
+                        pcts.A = Math.round((counts.A / total) * 100);
+                        pcts.K = Math.round((counts.K / total) * 100);
+                        pcts.Ad = Math.round((counts.Ad / total) * 100);
+                        const diff = 100 - (pcts.V + pcts.A + pcts.K + pcts.Ad);
+                        const maxKey = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+                        pcts[maxKey] += diff;
+                    }
+                    document.getElementById('vak-v-pct').textContent = `${pcts.V}%`;
+                    document.getElementById('vak-a-pct').textContent = `${pcts.A}%`;
+                    document.getElementById('vak-k-pct').textContent = `${pcts.K}%`;
+                    document.getElementById('vak-ad-pct').textContent = `${pcts.Ad}%`;
+                    document.getElementById('vak-v-bar').style.width = `${pcts.V}%`;
+                    document.getElementById('vak-a-bar').style.width = `${pcts.A}%`;
+                    document.getElementById('vak-k-bar').style.width = `${pcts.K}%`;
+                    document.getElementById('vak-ad-bar').style.width = `${pcts.Ad}%`;
+                    const resultEl = document.getElementById('vak-result');
+                    if (total === 0) {
+                        resultEl.innerHTML = `<span class="text-red-500">No se detectaron predicados VAK claros. Intenta con más texto.</span>`;
+                    } else {
+                        const max = Object.keys(pcts).reduce((a, b) => pcts[a] > pcts[b] ? a : b);
+                        const names = { V: 'Visual', A: 'Auditivo', K: 'Kinestésico', Ad: 'Auditivo Digital' };
+                        resultEl.innerHTML = `Predominio: <span class="text-primary-600 dark:text-accent-400 font-bold">${names[max]}</span>. Total de predicados detectados: ${total}.`;
+                    }
+                });
+
+                const quizData2 = [
+                    { q: "Cuando un cliente dice: 'La situación se ve oscura y nebulosa', ¿qué sistema representacional está revelando?", options: ["Auditivo", "Visual", "Kinestésico", "Auditivo Digital"], correct: 1, feedback: "'Ve', 'oscura' y 'nebulosa' son predicados visuales." },
+                    { q: "En el modelo clásico de claves de acceso ocular (persona diestra), ¿hacia dónde miran normalmente para acceder a una emoción o sensación?", options: ["Arriba a la derecha", "Medio a la izquierda", "Abajo a la derecha", "Abajo a la izquierda"], correct: 2, feedback: "Abajo a la derecha indica acceso kinestésico (K)." },
+                    { q: "¿Qué es una sinestesia en PNL?", options: ["Una alucinación auditiva", "El solapamiento automático entre sistemas representacionales (ej. ver una imagen genera una emoción)", "Un tipo de movimiento ocular cruzado", "Una técnica de hipnosis profunda"], correct: 1, feedback: "Es el puente automático entre canales (V -> K, A -> V, etc.)." },
+                    { q: "Las submodalidades analógicas se caracterizan por:", options: ["Ser de encendido/apagado (binarias)", "Variar en un continuo (ej. volumen, brillo)", "Ser siempre de tipo auditivo", "No poder ser modificadas conscientemente"], correct: 1, feedback: "Las analógicas varían gradualmente, a diferencia de las digitales (asociado/disociado)." },
+                    { q: "¿Qué es un 'Driver' o Submodalidad Crítica?", options: ["Una submodalidad que causa amnesia", "Una submodalidad que, al cambiar, arrastra y modifica el resto de la experiencia", "El tono de voz del terapeuta", "La creencia central del cliente"], correct: 1, feedback: "Cambiar el driver (como el brillo o la distancia) cambia toda la reacción emocional." },
+                    { q: "El 'Auditivo Digital' (Ad) se refiere a:", options: ["La música interna", "Las sensaciones viscerales", "El diálogo interno y la racionalización", "Las imágenes construidas"], correct: 2, feedback: "Es el lenguaje interno, hablar con uno mismo sin necesariamente un tono emocional." },
+                    { q: "¿Qué técnica consiste en tomar las submodalidades de un estado de recurso y aplicarlas a un estado limitante?", options: ["Anclaje", "Mapeo cruzado (Mapping across)", "Reencuadre", "Pacing y leading"], correct: 1, feedback: "El mapeo cruzado transfiere la estructura submodal de una experiencia a otra." },
+                    { q: "Fisiológicamente, una persona predominantemente kinestésica en un momento dado tiende a tener:", options: ["Respiración alta y rápida, voz aguda", "Respiración profunda y abdominal, voz lenta y grave", "Postura rígida y hombros tensos", "Movimientos oculares muy rápidos laterales"], correct: 1, feedback: "El kinestésico respira profundo, habla lento y tiene postura relajada." },
+                    { q: "Un error típico al usar claves de acceso ocular es:", options: ["Asumir que es un polígrafo infalible de mentiras", "Usarlas para entender el canal de procesamiento", "Observar al paciente", "Considerar que puede variar en zurdos"], correct: 0, feedback: "La construcción visual (arriba derecha) no es sinónimo de mentira, sino de imaginar algo nuevo." },
+                    { q: "Si un paciente mira 'Abajo a la izquierda' (modelo clásico diestro), probablemente está:", options: ["Recordando una imagen", "Construyendo un sonido", "Teniendo un diálogo interno (Ad)", "Sintiendo una emoción fuerte"], correct: 2, feedback: "Abajo a la izquierda corresponde al diálogo interno / Auditivo Digital." }
+                ];
+
+                const quizContainer2 = document.getElementById('quiz-container-2');
+                const scoreDisplay2 = document.getElementById('quiz-score-2');
+                let score2 = 0;
+                let answered2 = new Array(quizData2.length).fill(false);
+
+                quizData2.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `
+                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
+                        <div class="space-y-2" id="q2-opts-${index}">
+                            ${item.options.map((opt, i) => `<button class="quiz-btn-2 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
+                        </div>
+                        <div id="q2-feedback-${index}" class="mt-2 text-sm hidden"></div>
+                    `;
+                    quizContainer2.appendChild(qDiv);
+                });
+
+                document.querySelectorAll('.quiz-btn-2').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q);
+                        const optIdx = parseInt(this.dataset.opt);
+                        if (answered2[qIdx]) return;
+                        answered2[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q2-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q2-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData2[qIdx].correct;
+                        buttons.forEach((b, i) => {
+                            b.disabled = true;
+                            if (i === quizData2[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
+                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
+                            else b.classList.add('opacity-50');
+                        });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) {
+                            score2++;
+                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData2[qIdx].feedback}</span>`;
+                        } else {
+                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData2[qIdx].feedback}</span>`;
+                        }
+                        scoreDisplay2.textContent = `${score2}/${quizData2.length}`;
+                        if (window.appState) { window.appState.quizScores['mod2'] = score2; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 2:", e); }
+        })();
+
+        // ==========================================
+        // SCRIPTS MÓDULO 3
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod3Container = document.getElementById('modulo-3');
+                if (window.processDynamicContent) window.processDynamicContent(mod3Container);
+
+                // Lab 3: Meta-Modelo Trainer
+                const metaData = [
+                    { frase: "Me haces enfadar cuando llegas tarde.", patron: "Causa-Efecto", challenges: ["¿Quién te enfada?", "¿Cómo específicamente mi conducta causa tu enfado?", "¿Por qué te enfadas?"], correct: 1 },
+                    { frase: "Sé que estás pensando en irte de la empresa.", patron: "Lectura de Mente", challenges: ["¿Cómo sabes lo que pienso?", "¿Cuándo te dije eso?", "¿Por qué quieres irte?"], correct: 0 },
+                    { frase: "Nadie valora mi esfuerzo en este proyecto.", patron: "Cuantificador Universal", challenges: ["¿Absolutamente nadie?", "¿Qué esfuerzo hiciste?", "¿Por qué no te valoran?"], correct: 0 },
+                    { frase: "Es mejor hacerlo de esta manera.", patron: "Comparativo", challenges: ["¿Mejor que qué?", "¿Por qué es mejor?", "¿Quién lo dijo?"], correct: 0 },
+                    { frase: "La falta de comunicación rompió el equipo.", patron: "Nominalización", challenges: ["¿Quién no se está comunicando con quién y cómo?", "¿Qué se rompió?", "¿Cuándo pasó?"], correct: 0 }
+                ];
+
+                let currentMetaIdx = 0;
+                let metaScore = 0;
+                const fraseEl = document.getElementById('meta-frase');
+                const optsPatronEl = document.getElementById('meta-opts-patron');
+                const optsChallengeEl = document.getElementById('meta-opts-challenge');
+                const step2El = document.getElementById('meta-step-2');
+                const feedbackEl = document.getElementById('meta-feedback');
+                const nextBtn = document.getElementById('meta-next');
+
+                function loadMetaQuestion() {
+                    if (currentMetaIdx >= metaData.length) {
+                        fraseEl.textContent = "¡Has completado el entrenamiento!";
+                        optsPatronEl.innerHTML = `<p class="text-emerald-500 font-bold">Puntuación final: ${metaScore}/${metaData.length}</p>`;
+                        step2El.classList.add('hidden');
+                        nextBtn.classList.add('hidden');
+                        return;
+                    }
+                    const item = metaData[currentMetaIdx];
+                    fraseEl.textContent = `"${item.frase}"`;
+                    feedbackEl.classList.add('hidden');
+                    nextBtn.classList.add('hidden');
+                    step2El.classList.add('hidden');
+
+                    // Shuffle patrones for options
+                    const allPatrones = ["Causa-Efecto", "Lectura de Mente", "Cuantificador Universal", "Comparativo", "Nominalización"];
+                    const shuffled = allPatrones.sort(() => 0.5 - Math.random()).slice(0, 3);
+                    if (!shuffled.includes(item.patron)) shuffled[0] = item.patron;
+                    shuffled.sort(() => 0.5 - Math.random());
+
+                    optsPatronEl.innerHTML = '';
+                    shuffled.forEach(p => {
+                        const btn = document.createElement('button');
+                        btn.className = 'meta-patron-btn p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors';
+                        btn.textContent = p;
+                        btn.onclick = () => handlePatronSelect(p, item.patron);
+                        optsPatronEl.appendChild(btn);
+                    });
+                }
+
+                function handlePatronSelect(selected, correct) {
+                    const buttons = document.querySelectorAll('.meta-patron-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    
+                    if (selected === correct) {
+                        document.querySelector(`.meta-patron-btn:not([disabled])`)?.classList.remove('bg-emerald-100');
+                        buttons.forEach(b => {
+                            if (b.textContent === correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500');
+                            else b.classList.add('opacity-50');
+                        });
+                        step2El.classList.remove('hidden');
+                        loadChallengeOptions(correct);
+                    } else {
+                        buttons.forEach(b => {
+                            if (b.textContent === selected) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500');
+                            else if (b.textContent === correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500');
+                            else b.classList.add('opacity-50');
+                        });
+                        showFeedback(false, "Patrón incorrecto. Intenta identificar la estructura universal (Omisión, Generalización o Distorsión) primero.");
+                        nextBtn.classList.remove('hidden');
+                    }
+                }
+
+                function loadChallengeOptions(patron) {
+                    const item = metaData[currentMetaIdx];
+                    optsChallengeEl.innerHTML = '';
+                    item.challenges.forEach((c, i) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'meta-challenge-btn p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors text-left';
+                        btn.textContent = c;
+                        btn.onclick = () => handleChallengeSelect(i, item.correct);
+                        optsChallengeEl.appendChild(btn);
+                    });
+                }
+
+                function handleChallengeSelect(selected, correct) {
+                    const buttons = document.querySelectorAll('.meta-challenge-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    const isCorrect = selected === correct;
+                    
+                    buttons.forEach((b, i) => {
+                        if (i === correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500');
+                        else if (i === selected) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500');
+                        else b.classList.add('opacity-50');
+                    });
+
+                    if (isCorrect) metaScore++;
+                    showFeedback(isCorrect, isCorrect ? "¡Correcto! Has recuperado la información borrada o distorsionada." : "Challenge incorrecto. Revisa la estructura del Meta-Modelo.");
+                    nextBtn.classList.remove('hidden');
+                }
+
+                function showFeedback(success, msg) {
+                    feedbackEl.classList.remove('hidden');
+                    feedbackEl.className = `mt-4 p-3 rounded text-sm ${success ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300' : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`;
+                    feedbackEl.innerHTML = `<strong>${success ? '✓' : '✗'}</strong> ${msg}`;
+                }
+
+                nextBtn.onclick = () => {
+                    currentMetaIdx++;
+                    loadMetaQuestion();
+                };
+                
+                loadMetaQuestion();
+
+                // Quiz 3
+                const quizData3 = [
+                    { q: "'Nadie me valora' es un ejemplo de:", options: ["Cuantificador Universal", "Omisión", "Lectura de mente"], correct: 0, feedback: "'Nadie' generaliza a toda la humanidad. Challenge: '¿Absolutamente nadie?'" },
+                    { q: "¿Cuál es el challenge para 'Me haces enfadar'?", options: ["¿Quién te enfada?", "¿Cómo específicamente mi conducta causa tu enfado?", "¿Por qué te enfadas?"], correct: 1, feedback: "Rompe la distorsión de Causa-Efecto." },
+                    { q: "'Depresión' en PNL se trata como:", options: ["Un trastorno químico", "Una nominalización", "Un cuantificador"], correct: 1, feedback: "Es un proceso (deprimirse) congelado en el tiempo." },
+                    { q: "'Si no me sonríes, estás enfadado conmigo' es:", options: ["Equivalencia Compleja", "Juicio", "Borrado"], correct: 0, feedback: "Asume que A significa B. Challenge: '¿Cómo significa no sonreír estar enfadado?'" },
+                    { q: "El propósito del Meta-Modelo es:", options: ["Hipnotizar", "Recuperar experiencia borrada", "Vender"], correct: 1, feedback: "Busca reconectar la estructura superficial con la profunda." },
+                    { q: "'Debo trabajar más' contiene:", options: ["Operador Modal de Necesidad", "Posibilidad", "Omisión"], correct: 0, feedback: "Challenge: '¿Qué pasaría si no trabajas más?'" },
+                    { q: "'Es mejor hacerlo así' es un patrón de:", options: ["Comparativo", "Universal", "Causa-Efecto"], correct: 0, feedback: "Falta el referente. Challenge: '¿Mejor que qué?'" },
+                    { q: "'Sé que estás pensando en irte' es:", options: ["Lectura de mente", "Presuposición", "Nominalización"], correct: 0, feedback: "Asume saber el estado interno del otro." },
+                    { q: "El Meta-Modelo se basa en la gramática de:", options: ["Chomsky", "Skinner", "Pavlov"], correct: 0, feedback: "Gramática Transformacional." },
+                    { q: "'Mi jefe me pone nervioso' viola la metáfora de:", options: ["Causa-Efecto", "Recurso", "Mapa"], correct: 0, feedback: "Asume que el jefe causa directamente el estado interno." },
+                    { q: "Disparar muchas preguntas del Meta-Modelo sin rapport se llama:", options: ["Ametrallamiento", "Pacing", "Leading"], correct: 0, feedback: "Se percibe como un interrogatorio agresivo." },
+                    { q: "La estructura superficial es:", options: ["El significado profundo", "Lo que decimos", "La intención"], correct: 1, feedback: "Es la versión reducida y transformada que sale por nuestra boca." }
+                ];
+
+                const quizContainer3 = document.getElementById('quiz-container-3');
+                const scoreDisplay3 = document.getElementById('quiz-score-3');
+                let score3 = 0;
+                let answered3 = new Array(quizData3.length).fill(false);
+
+                quizData3.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `
+                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
+                        <div class="space-y-2" id="q3-opts-${index}">
+                            ${item.options.map((opt, i) => `<button class="quiz-btn-3 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
+                        </div>
+                        <div id="q3-feedback-${index}" class="mt-2 text-sm hidden"></div>
+                    `;
+                    quizContainer3.appendChild(qDiv);
+                });
+
+                document.querySelectorAll('.quiz-btn-3').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q);
+                        const optIdx = parseInt(this.dataset.opt);
+                        if (answered3[qIdx]) return;
+                        answered3[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q3-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q3-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData3[qIdx].correct;
+                        buttons.forEach((b, i) => {
+                            b.disabled = true;
+                            if (i === quizData3[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
+                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
+                            else b.classList.add('opacity-50');
+                        });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) {
+                            score3++;
+                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData3[qIdx].feedback}</span>`;
+                        } else {
+                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData3[qIdx].feedback}</span>`;
+                        }
+                        scoreDisplay3.textContent = `${score3}/${quizData3.length}`;
+                        if (window.appState) { window.appState.quizScores['mod3'] = score3; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 3:", e); }
+        })();
+        // ==========================================
+        // SCRIPTS MÓDULO 4
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod4Container = document.getElementById('modulo-4');
+                if (window.processDynamicContent) window.processDynamicContent(mod4Container);
+
+                // Lab 4: Metaforizador
+                const metaProblema = document.getElementById('meta-problema');
+                const metaDominio = document.getElementById('meta-dominio');
+                const metaRecurso = document.getElementById('meta-recurso');
+                const metaOutput = document.getElementById('meta-output');
+
+                function updateMetaforizador() {
+                    const p = metaProblema.value;
+                    const d = metaDominio.value;
+                    const r = metaRecurso.value;
+                    metaOutput.innerHTML = `Había una vez ${d} que sentía ${p}. Parecía que no podría seguir adelante, pero entonces descubrió que dentro de sí misma tenía el poder de ${r}. Y así como ${d} puede encontrar su camino, tú también puedes <strong>*permitirte ${r}*</strong> ahora mismo, sabiendo que los recursos ya están en ti.`;
+                }
+                [metaProblema, metaDominio, metaRecurso].forEach(el => el.addEventListener('change', updateMetaforizador));
+                updateMetaforizador();
+
+                // Quiz 4
+                const quizData4 = [
+                    { q: "El Modelo Milton busca:", options: ["Especificidad", "Vaguedad", "Confrontación"], correct: 1, feedback: "Usa la vaguedad para inducir trance." },
+                    { q: "'¿Quieres entrar en trance ahora o en un minuto?' es un:", options: ["Doble vínculo", "Comando incrustado", "Tag question"], correct: 0, feedback: "Ilusión de elección." },
+                    { q: "'El hombre vio a la mujer con el telescopio' es ambigüedad:", options: ["Fonológica", "Sintáctica", "Puntuación"], correct: 1, feedback: "Función gramatical incierta." },
+                    { q: "Marcar un comando incrustado implica:", options: ["Gritar", "Cambiar tono o ritmo", "Preguntar"], correct: 1, feedback: "El cambio de tono lo señala al inconsciente." },
+                    { q: "'No pienses en relajarte' usa el patrón de:", options: ["Negación", "Ambigüedad", "Lectura de mente"], correct: 0, feedback: "La negación obliga al cerebro a representar lo negado." },
+                    { q: "El isomorfismo en metáforas significa:", options: ["Que la historia es idéntica", "Que la estructura relacional coincide", "Que usa los mismos nombres"], correct: 1, feedback: "El vehículo y el tenor comparten estructura." },
+                    { q: "'La comprensión puede llegar' usa:", options: ["Índice referencial falta", "Nominalización", "Universal"], correct: 1, feedback: "'Comprensión' es un proceso congelado." },
+                    { q: "'Puedes sentirte cómodo, ¿verdad?' es:", options: ["Tag question", "Doble vínculo", "Presuposición"], correct: 0, feedback: "Busca validación al final de la frase." },
+                    { q: "El Modelo Milton se extrajo de:", options: ["Perls", "Erickson", "Satir"], correct: 1, feedback: "Milton Erickson." },
+                    { q: "El trance hipnótico en PNL se define como:", options: ["Pérdida de consciencia", "Estado de focalización atencional interna", "Dormir"], correct: 1, feedback: "No es inconsciencia, es focalización." }
+                ];
+                const quizContainer4 = document.getElementById('quiz-container-4');
+                const scoreDisplay4 = document.getElementById('quiz-score-4');
+                let score4 = 0;
+                let answered4 = new Array(quizData4.length).fill(false);
+
+                quizData4.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q4-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-4 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q4-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
+                    quizContainer4.appendChild(qDiv);
+                });
+                document.querySelectorAll('.quiz-btn-4').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
+                        if (answered4[qIdx]) return; answered4[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q4-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q4-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData4[qIdx].correct;
+                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData4[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) { score4++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData4[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData4[qIdx].feedback}</span>`; }
+                        scoreDisplay4.textContent = `${score4}/${quizData4.length}`;
+                        if (window.appState) { window.appState.quizScores['mod4'] = score4; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 4:", e); }
+        })();
+
+        // ==========================================
+        // SCRIPTS MÓDULO 5
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod5Container = document.getElementById('modulo-5');
+                if (window.processDynamicContent) window.processDynamicContent(mod5Container);
+
+                // Lab 5: Colapso de Anclas
+                let recursoNivel = 0, limiteNivel = 0;
+                const btnRecurso = document.getElementById('colapsar-recurso');
+                const btnLimite = document.getElementById('colapsar-limite');
+                const btnDisparar = document.getElementById('colapsar-disparar');
+                const visColapso = document.getElementById('colapso-visual');
+
+                function checkDisparar() {
+                    btnDisparar.disabled = !(recursoNivel > 0 && limiteNivel > 0);
+                }
+
+                btnRecurso.addEventListener('click', () => {
+                    recursoNivel = Math.min(100, recursoNivel + 25);
+                    document.getElementById('nivel-recurso').textContent = recursoNivel + '%';
+                    checkDisparar();
+                });
+
+                btnLimite.addEventListener('click', () => {
+                    limiteNivel = Math.min(100, limiteNivel + 25);
+                    document.getElementById('nivel-limite').textContent = limiteNivel + '%';
+                    checkDisparar();
+                });
+
+                btnDisparar.addEventListener('click', () => {
+                    btnRecurso.disabled = true; btnLimite.disabled = true; btnDisparar.disabled = true;
+                    if (recursoNivel >= limiteNivel) {
+                        visColapso.className = "w-48 h-48 rounded-full bg-emerald-500 flex items-center justify-center text-center text-white font-bold p-4 transition-all duration-700";
+                        visColapso.textContent = "¡Recurso Integra Límite! (Éxito)";
+                    } else {
+                        visColapso.className = "w-48 h-48 rounded-full bg-red-500 flex items-center justify-center text-center text-white font-bold p-4 transition-all duration-700";
+                        visColapso.textContent = "El Límite domina. Refuerza el Recurso. (Fallo)";
+                    }
+                    setTimeout(() => {
+                        recursoNivel = 0; limiteNivel = 0;
+                        document.getElementById('nivel-recurso').textContent = '0%';
+                        document.getElementById('nivel-limite').textContent = '0%';
+                        btnRecurso.disabled = false; btnLimite.disabled = false;
+                        visColapso.className = "w-48 h-48 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center text-center text-xs font-bold p-4 transition-all duration-700";
+                        visColapso.textContent = "Esperando carga...";
+                    }, 4000);
+                });
+
+                // Quiz 5
+                const quizData5 = [
+                    { q: "El anclaje se basa en el condicionamiento de:", options: ["Pavlov", "Skinner", "Bandura"], correct: 0, feedback: "Condicionamiento clásico (estímulo-respuesta)." },
+                    { q: "El timing ideal para aplicar un ancla es:", options: ["Al inicio del estado", "En el pico", "Al final"], correct: 1, feedback: "Justo en el pico de intensidad." },
+                    { q: "Acumular varios recursos en un mismo ancla se llama:", options: ["Colapso", "Stacking", "Mapeo"], correct: 1, feedback: "Stacking o apilado." },
+                    { q: "Disparar un ancla limitante y una de recurso simultáneamente se llama:", options: ["Cambio de historia", "Colapso de anclas", "Swish"], correct: 1, feedback: "Colapso de anclas." },
+                    { q: "Un ancla debe ser:", options: ["Común y corriente", "Única y replicable", "Difícil de reproducir"], correct: 1, feedback: "Única para no saturarse y replicable para usarla." },
+                    { q: "¿Qué es 'romper estado'?", options: ["Terminar la sesión", "Distraer al cliente para sacarlo del estado", "Quitar el ancla"], correct: 1, feedback: "Cambio de foco atencional brusco." },
+                    { q: "El Círculo de Excelencia es un ancla:", options: ["Visual", "Auditiva", "Espacial/Kinestésica"], correct: 2, feedback: "Usa el espacio y el cuerpo." },
+                    { q: "Si aplicas el ancla cuando la emoción baja, anclas:", options: ["El recurso", "La transición de bajada", "Nada"], correct: 1, feedback: "Error común de timing." },
+                    { q: "Modificar la emoción de un recuerdo pasado con un recurso se llama:", options: ["Cambio de Historia", "Reencuadre", "Swish"], correct: 0, feedback: "Cambio de historia personal." },
+                    { q: "Para que un colapso funcione, el recurso debe ser:", options: ["Menos intenso", "Igual de intenso", "Más intenso"], correct: 2, feedback: "El recurso debe superar al límite." }
+                ];
+                const quizContainer5 = document.getElementById('quiz-container-5');
+                const scoreDisplay5 = document.getElementById('quiz-score-5');
+                let score5 = 0; let answered5 = new Array(quizData5.length).fill(false);
+
+                quizData5.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q5-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-5 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q5-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
+                    quizContainer5.appendChild(qDiv);
+                });
+                document.querySelectorAll('.quiz-btn-5').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
+                        if (answered5[qIdx]) return; answered5[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q5-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q5-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData5[qIdx].correct;
+                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData5[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) { score5++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData5[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData5[qIdx].feedback}</span>`; }
+                        scoreDisplay5.textContent = `${score5}/${quizData5.length}`;
+                        if (window.appState) { window.appState.quizScores['mod5'] = score5; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 5:", e); }
+        })();
+
+        // ==========================================
+        // SCRIPTS MÓDULO 6
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod6Container = document.getElementById('modulo-6');
+                if (window.processDynamicContent) window.processDynamicContent(mod6Container);
+
+                // Lab 6: Niveles Neurológicos
+                const nivelesData = [
+                    { frase: "No soy capaz de hacer esto.", nivel: "Identidad", opts: ["Entorno", "Comportamiento", "Capacidad", "Creencias", "Identidad"] },
+                    { frase: "Aquí en la oficina me siento agobiado.", nivel: "Entorno", opts: ["Entorno", "Comportamiento", "Capacidad", "Creencias", "Identidad"] },
+                    { frase: "Creo que el esfuerzo no vale la pena.", nivel: "Creencias", opts: ["Entorno", "Comportamiento", "Capacidad", "Creencias", "Identidad"] },
+                    { frase: "Grito cuando me llevan la contraria.", nivel: "Comportamiento", opts: ["Entorno", "Comportamiento", "Capacidad", "Creencias", "Identidad"] },
+                    { frase: "Sé comunicarme en público.", nivel: "Capacidad", opts: ["Entorno", "Comportamiento", "Capacidad", "Creencias", "Identidad"] }
+                ];
+                let currentNivelIdx = 0;
+                const fraseEl = document.getElementById('nivel-frase');
+                const optsEl = document.getElementById('nivel-opts');
+                const feedbackEl = document.getElementById('nivel-feedback');
+                const nextBtn = document.getElementById('nivel-next');
+
+                function loadNivelQ() {
+                    if (currentNivelIdx >= nivelesData.length) {
+                        fraseEl.textContent = "¡Diagnóstico completado!";
+                        optsEl.innerHTML = '';
+                        nextBtn.classList.add('hidden');
+                        return;
+                    }
+                    const item = nivelesData[currentNivelIdx];
+                    fraseEl.textContent = `"${item.frase}"`;
+                    feedbackEl.classList.add('hidden'); nextBtn.classList.add('hidden');
+                    optsEl.innerHTML = '';
+                    item.opts.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'nivel-btn p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]';
+                        btn.textContent = opt;
+                        btn.onclick = () => handleNivelSelect(opt, item.nivel);
+                        optsEl.appendChild(btn);
+                    });
+                }
+                function handleNivelSelect(selected, correct) {
+                    const buttons = document.querySelectorAll('.nivel-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    const isCorrect = selected === correct;
+                    buttons.forEach(b => {
+                        if (b.textContent === correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500');
+                        else if (b.textContent === selected) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500');
+                        else b.classList.add('opacity-50');
+                    });
+                    feedbackEl.classList.remove('hidden');
+                    feedbackEl.className = `mt-2 text-sm ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`;
+                    feedbackEl.textContent = isCorrect ? "¡Correcto!" : `Incorrecto. El nivel es: ${correct}.`;
+                    nextBtn.classList.remove('hidden');
+                }
+                nextBtn.onclick = () => { currentNivelIdx++; loadNivelQ(); };
+                loadNivelQ();
+
+                // Quiz 6
+                const quizData6 = [
+                    { q: "¿Qué significa la 'T' en TOTE?", options: ["Think", "Test", "Time"], correct: 1, feedback: "Test (evaluación)." },
+                    { q: "El nivel que responde a '¿Por qué?' es:", options: ["Comportamiento", "Creencias", "Entorno"], correct: 1, feedback: "Creencias y Valores dan el motivo." },
+                    { q: "'Soy un fracasado' es nivel:", options: ["Identidad", "Capacidad", "Comportamiento"], correct: 0, feedback: "Ataca al 'Quién soy'." },
+                    { q: "Un cambio en Identidad afecta a los niveles:", options: ["Superiores", "Inferiores", "Ninguno"], correct: 1, feedback: "Los inferiores (creencias, capacidad, etc.)." },
+                    { q: "El Sleight of Mouth sirve para:", options: ["Instalar anclas", "Desarmar creencias", "Mejorar el rapport"], correct: 1, feedback: "Patrones de reencuadre de creencias." },
+                    { q: "El modelo TOTE fue creado por:", options: ["Dilts", "Miller, Galanter y Pribram", "Bandler"], correct: 1, feedback: "Modelo cognitivo de los 60s." },
+                    { q: "En el TOTE, 'Operate' sirve para:", options: ["Salir", "Reducir la diferencia entre estados", "Evaluar"], correct: 1, feedback: "Operación para alcanzar la meta." },
+                    { q: "'No sé hablar en público' mezcla niveles de:", options: ["Identidad y Entorno", "Capacidad e Identidad", "Comportamiento y Valores"], correct: 1, feedback: "Confunde 'saber hacer' con 'ser'." },
+                    { q: "El nivel más alto de Dilts es:", options: ["Identidad", "Espiritual/Trascendencia", "Creencias"], correct: 1, feedback: "El sistema mayor, 'Para quién más'." },
+                    { q: "'Aplicarse a sí mismo' es un patrón de:", options: ["Meta-Modelo", "Sleight of Mouth", "Milton"], correct: 1, feedback: "Devuelve la creencia al emisor." },
+                    { q: "Si un cliente dice 'Aquí no puedo', interviene en el nivel de:", options: ["Entorno", "Identidad", "Capacidad"], correct: 0, feedback: "'Aquí' = Entorno." },
+                    { q: "Las estrategias en PNL se representan como:", options: ["Secuencias de letras (Ve, Ai, Ki)", "Mapas conceptuales", "Árboles"], correct: 0, feedback: "Notación VAK con e/i (externo/interno)." }
+                ];
+                const quizContainer6 = document.getElementById('quiz-container-6');
+                const scoreDisplay6 = document.getElementById('quiz-score-6');
+                let score6 = 0; let answered6 = new Array(quizData6.length).fill(false);
+
+                quizData6.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q6-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-6 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q6-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
+                    quizContainer6.appendChild(qDiv);
+                });
+                document.querySelectorAll('.quiz-btn-6').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
+                        if (answered6[qIdx]) return; answered6[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q6-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q6-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData6[qIdx].correct;
+                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData6[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) { score6++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData6[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData6[qIdx].feedback}</span>`; }
+                        scoreDisplay6.textContent = `${score6}/${quizData6.length}`;
+                        if (window.appState) { window.appState.quizScores['mod6'] = score6; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 6:", e); }
+        })();
+                // ==========================================
+        // SCRIPTS MÓDULO 7
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod7Container = document.getElementById('modulo-7');
+                if (window.processDynamicContent) window.processDynamicContent(mod7Container);
+
+                // Lab 7: Posiciones Perceptuales
+                document.getElementById('pos-integrar').addEventListener('click', function() {
+                    const p1 = document.getElementById('pos-1').value.trim();
+                    const p2 = document.getElementById('pos-2').value.trim();
+                    const p3 = document.getElementById('pos-3').value.trim();
+                    const p4 = document.getElementById('pos-4').value.trim();
+                    const resultEl = document.getElementById('pos-result');
+                    
+                    if (!p1 || !p2 || !p3 || !p4) {
+                        resultEl.classList.remove('hidden');
+                        resultEl.className = "mt-4 p-4 rounded bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-sm";
+                        resultEl.textContent = "Por favor, completa las 4 posiciones para integrar.";
+                        return;
+                    }
+                    resultEl.classList.remove('hidden');
+                    resultEl.className = "mt-4 p-4 rounded bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm";
+                    resultEl.innerHTML = `<strong>Síntesis Integrativa (Meta-Mirror):</strong><br> Reconoces tu verdad ("${p1}"), empatizas con el otro ("${p2}"), observas con objetividad ("${p3}"), y atiendes al sistema ("${p4}"). Esta amplitud de perspectiva te otorga flexibilidad conductual para resolver el conflicto.`;
+                });
+
+                // Quiz 7
+                const quizData7 = [
+                    { q: "Igualar la postura de alguien se llama:", options: ["Leading", "Matching", "Calibrando"], correct: 1, feedback: "Matching o Mirroring." },
+                    { q: "Ver la situación desde fuera, viéndote a ti y al otro, es:", options: ["1ª Posición", "2ª Posición", "3ª Posición"], correct: 2, feedback: "3ª Posición (Observador)." },
+                    { q: "Mover el dedo al ritmo de la respiración del otro es:", options: ["Cross-over matching", "Pacing", "Mirroring"], correct: 0, feedback: "Cross-over matching (canal cruzado)." },
+                    { q: "Antes de guiar (Lead), debes:", options: ["Calibrar", "Acompasar (Pace)", "Romper estado"], correct: 1, feedback: "Sin pacing no hay leading efectivo." },
+                    { q: "La 2ª posición perceptual desarrolla:", options: ["El análisis lógico", "La empatía", "El ego"], correct: 1, feedback: "Ponerte en los zapatos del otro." },
+                    { q: "'Su rostro se puso rojo' es:", options: ["Interpretación", "Calibración", "Alucinación"], correct: 1, feedback: "Es observable y objetivo." },
+                    { q: "'Está enfadado' es:", options: ["Calibración", "Interpretación", "Rapport"], correct: 1, feedback: "Es una atribución interna, no observable." },
+                    { q: "El rapport se basa en la idea de:", options: ["Dominación", "Afinidad y confianza", "Manipulación"], correct: 1, feedback: "Confianza inconsciente." },
+                    { q: "Intentar calmar a alguien sin validar antes su enfado suele generar:", options: ["Rapport", "Resistencia", "Trance"], correct: 1, feedback: "Falta de pacing." },
+                    { q: "La 4ª posición perceptual se centra en:", options: ["El 'Yo'", "El 'Tú'", "El 'Nosotros'/Sistema"], correct: 2, feedback: "Visión sistémica." }
+                ];
+                const quizContainer7 = document.getElementById('quiz-container-7');
+                const scoreDisplay7 = document.getElementById('quiz-score-7');
+                let score7 = 0; let answered7 = new Array(quizData7.length).fill(false);
+
+                quizData7.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q7-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-7 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q7-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
+                    quizContainer7.appendChild(qDiv);
+                });
+                document.querySelectorAll('.quiz-btn-7').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
+                        if (answered7[qIdx]) return; answered7[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q7-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q7-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData7[qIdx].correct;
+                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData7[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) { score7++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData7[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData7[qIdx].feedback}</span>`; }
+                        scoreDisplay7.textContent = `${score7}/${quizData7.length}`;
+                        if (window.appState) { window.appState.quizScores['mod7'] = score7; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 7:", e); }
+        })();
+
+        // ==========================================
+        // SCRIPTS MÓDULO 8
+        // ==========================================
+        (function() {
+            'use strict';
+            try {
+                const mod8Container = document.getElementById('modulo-8');
+                if (window.processDynamicContent) window.processDynamicContent(mod8Container);
+
+                // Lab 8: Time Line Explorer
+                const tlVisual = document.getElementById('tl-visual');
+                document.getElementById('tl-in-time').addEventListener('click', () => {
+                    tlVisual.innerHTML = `<div class="flex flex-col items-center"><div class="text-xs mb-2 text-[var(--text-muted)]">Futuro</div><div class="w-16 h-16 rounded-full bg-primary-500 text-white flex items-center justify-center text-xs font-bold my-2">TÚ</div><div class="text-xs mt-2 text-[var(--text-muted)]">Pasado</div><p class="mt-4 text-xs italic max-w-md">Estás *dentro* del tiempo. El pasado está detrás (no lo ves a menos que te des la vuelta) y el futuro delante. Muy emocional y asociado.</p></div>`;
+                });
+                document.getElementById('tl-through-time').addEventListener('click', () => {
+                    tlVisual.innerHTML = `<div class="w-full flex justify-between items-center px-8 relative"><div class="text-xs text-[var(--text-muted)]">Pasado</div><div class="flex-1 h-1 bg-accent-500 mx-2 relative"><div class="absolute w-4 h-4 rounded-full bg-accent-500 -top-1.5 left-1/2 -ml-2 border-2 border-white dark:border-slate-900"></div></div><div class="text-xs text-[var(--text-muted)]">Futuro</div><p class="absolute -bottom-12 left-1/2 -ml-32 text-xs italic max-w-xs">Ves toda la línea frente a ti. Disociado, ideal para planificar.</p></div>`;
+                });
+
+                // Quiz 8
+                const quizData8 = [
+                    { q: "Si tu pasado está detrás y tu futuro delante, eres:", options: ["Through Time", "In Time", "Disociado"], correct: 1, feedback: "In Time (asociado)." },
+                    { q: "Ver el tiempo como una línea frente a ti es:", options: ["In Time", "Through Time", "1ª Posición"], correct: 1, feedback: "Through Time (disociado)." },
+                    { q: "El Swish Pattern se usa para:", options: ["Crear fobias", "Romper patrones automáticos", "Inducir trance"], correct: 1, feedback: "Interrumpe la secuencia submodal." },
+                    { q: "En el Swish, la imagen del yo deseado debe ser:", options: ["Asociada", "Disociada", "En blanco y negro"], correct: 1, feedback: "Disociada para que atraiga hacia ella." },
+                    { q: "La Fast Phobia Cure usa:", options: ["Doble asociación", "Doble disociación", "Hipnosis profunda"], correct: 1, feedback: "Viéndose a sí mismo viéndose a sí mismo." },
+                    { q: "Antes de hacer un cambio, la PNL exige revisar:", options: ["El precio", "La ecología", "El pago"], correct: 1, feedback: "Test de ecología sistémica." },
+                    { q: "Una línea 'Through Time' es mejor para:", options: ["Vivir el presente", "Planificar", "Sentir emociones"], correct: 1, feedback: "Permite ver el panorama completo." },
+                    { q: "Morderse las uñas y aplicar Swish requiere que la imagen inicial sea:", options: ["El yo deseado", "El disparador (mano a la boca)", "Un espacio vacío"], correct: 1, feedback: "El estímulo que dispara el hábito." },
+                    { q: "En la Fast Phobia, el paciente se ve a sí mismo viendo una película de sí mismo. Esto es:", options: ["1ª posición", "3ª posición", "Doble disociación"], correct: 2, feedback: "Dos niveles de distancia." },
+                    { q: "En ventas, usar el rapport y predicados del cliente es una aplicación:", options: ["Clínica", "Organizacional", "Educativa"], correct: 1, feedback: "Ventas y negociación." },
+                    { q: "El test ecológico responde a la pregunta:", options: ["¿Cuánto cuesta?", "¿Cómo afectará este cambio al resto de mi vida?", "¿Quién es el terapeuta?"], correct: 1, feedback: "Impacto sistémico." },
+                    { q: "El rebobinado rápido (rewind) en la Fast Phobia utiliza:", options: ["Submodalidades auditivas", "Submodalidades visuales y velocidad", "Anclas kinestésicas"], correct: 1, feedback: "Distorsiona el tiempo visual." }
+                ];
+                const quizContainer8 = document.getElementById('quiz-container-8');
+                const scoreDisplay8 = document.getElementById('quiz-score-8');
+                let score8 = 0; let answered8 = new Array(quizData8.length).fill(false);
+
+                quizData8.forEach((item, index) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q8-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-8 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q8-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
+                    quizContainer8.appendChild(qDiv);
+                });
+                document.querySelectorAll('.quiz-btn-8').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
+                        if (answered8[qIdx]) return; answered8[qIdx] = true;
+                        const buttons = document.querySelectorAll(`#q8-opts-${qIdx} button`);
+                        const feedbackDiv = document.getElementById(`q8-feedback-${qIdx}`);
+                        const isCorrect = optIdx === quizData8[qIdx].correct;
+                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData8[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
+                        feedbackDiv.classList.remove('hidden');
+                        if (isCorrect) { score8++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData8[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData8[qIdx].feedback}</span>`; }
+                        scoreDisplay8.textContent = `${score8}/${quizData8.length}`;
+                        if (window.appState) { window.appState.quizScores['mod8'] = score8; if (window.saveState) window.saveState(); }
+                    });
+                });
+            } catch (e) { console.error("Error Mod 8:", e); }
+        })();
+    </script>
+</body>
+</html>
