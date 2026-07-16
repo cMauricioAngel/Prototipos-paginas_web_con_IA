@@ -1,0 +1,14 @@
+{
+  "name": "prototipos-paginas-web-con-ia",
+  "version": "1.0.0",
+  "description": "Prototipo educativo de PNL (single-page). Incluye pruebas unitarias del JavaScript embebido.",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "jsdom": "24.1.0"
+  }
+}
