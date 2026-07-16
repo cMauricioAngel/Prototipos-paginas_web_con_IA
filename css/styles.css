@@ -1,0 +1,52 @@
+        :root {
+            --bg-main: #f8fafc;
+            --bg-sidebar: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        .dark {
+            --bg-main: #0f172a;
+            --bg-sidebar: #1e1b4b; /* Violet 950 oscuro personalizado */
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #312e81;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Custom */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #a78bfa; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #6d28d9; }
+
+        /* Sidebar active link */
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), transparent);
+            border-left: 4px solid #d946ef;
+            color: #d946ef;
+            font-weight: 600;
+        }
+        .dark .nav-link.active {
+            background: linear-gradient(90deg, rgba(217, 70, 239, 0.15), transparent);
+            color: #f0abfc;
+        }
+
+        /* Animaciones de transición */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilos de impresión */
+        @media print {
+            #sidebar, #menu-btn, #theme-toggle, .no-print { display: none !important; }
+            main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+            body { background: white !important; color: black !important; font-size: 12pt; }
+            .modulo-container { page-break-inside: avoid; border: none !important; box-shadow: none !important; }
+            h1, h2, h3 { color: black !important; }
+        }
