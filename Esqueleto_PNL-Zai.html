@@ -1218,7 +1218,62 @@
             progressBar.style.width = `${initialProgress}%`;
             progressText.textContent = `${Math.round(initialProgress)}%`;
         });
-        
+
+        // ==========================================
+        // SISTEMA CORE: Motor de Cuestionarios (compartido)
+        // ==========================================
+        // Renderiza y gestiona un cuestionario de opción múltiple para un módulo.
+        // Reemplaza la lógica que antes se duplicaba en cada módulo (1-8).
+        window.initQuiz = function(moduleNum, quizData) {
+            const container = document.getElementById(`quiz-container-${moduleNum}`);
+            const scoreDisplay = document.getElementById(`quiz-score-${moduleNum}`);
+            if (!container) return;
+
+            let score = 0;
+            const answered = new Array(quizData.length).fill(false);
+            const btnClass = `quiz-btn-${moduleNum}`;
+
+            quizData.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
+                qDiv.innerHTML = `
+                    <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
+                    <div class="space-y-2" id="q${moduleNum}-opts-${index}">
+                        ${item.options.map((opt, i) => `<button class="${btnClass} w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
+                    </div>
+                    <div id="q${moduleNum}-feedback-${index}" class="mt-2 text-sm hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+
+            container.querySelectorAll(`.${btnClass}`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const qIdx = parseInt(this.dataset.q);
+                    const optIdx = parseInt(this.dataset.opt);
+                    if (answered[qIdx]) return;
+                    answered[qIdx] = true;
+                    const buttons = document.querySelectorAll(`#q${moduleNum}-opts-${qIdx} button`);
+                    const feedbackDiv = document.getElementById(`q${moduleNum}-feedback-${qIdx}`);
+                    const isCorrect = optIdx === quizData[qIdx].correct;
+                    buttons.forEach((b, i) => {
+                        b.disabled = true;
+                        if (i === quizData[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
+                        else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
+                        else b.classList.add('opacity-50');
+                    });
+                    feedbackDiv.classList.remove('hidden');
+                    if (isCorrect) {
+                        score++;
+                        feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData[qIdx].feedback}</span>`;
+                    } else {
+                        feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData[qIdx].feedback}</span>`;
+                    }
+                    if (scoreDisplay) scoreDisplay.textContent = `${score}/${quizData.length}`;
+                    if (window.appState) { window.appState.quizScores[`mod${moduleNum}`] = score; if (window.saveState) window.saveState(); }
+                });
+            });
+        };
+
         // ==========================================
         // SCRIPTS MÓDULO 1
         // ==========================================
@@ -1283,50 +1338,7 @@
                     { q: "La 'Ley de la Variedad Requerida' se asocia con:", options: ["La rigidez del terapeuta", "La inhibición del paciente", "La flexibilidad conductual y de comunicación", "El uso de la mente consciente analítica"], correct: 2, feedback: "En un sistema interactivo, quien tiene más opciones de respuesta tiene el control de la dinámica." }
                 ];
 
-                const quizContainer1 = document.getElementById('quiz-container-1');
-                const scoreDisplay1 = document.getElementById('quiz-score-1');
-                let score1 = 0;
-                let answered1 = new Array(quizData1.length).fill(false);
-
-                quizData1.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `
-                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
-                        <div class="space-y-2" id="q1-opts-${index}">
-                            ${item.options.map((opt, i) => `<button class="quiz-btn-1 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
-                        </div>
-                        <div id="q1-feedback-${index}" class="mt-2 text-sm hidden"></div>
-                    `;
-                    quizContainer1.appendChild(qDiv);
-                });
-
-                document.querySelectorAll('.quiz-btn-1').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q);
-                        const optIdx = parseInt(this.dataset.opt);
-                        if (answered1[qIdx]) return;
-                        answered1[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q1-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q1-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData1[qIdx].correct;
-                        buttons.forEach((b, i) => {
-                            b.disabled = true;
-                            if (i === quizData1[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
-                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
-                            else b.classList.add('opacity-50');
-                        });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) {
-                            score1++;
-                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData1[qIdx].feedback}</span>`;
-                        } else {
-                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData1[qIdx].feedback}</span>`;
-                        }
-                        scoreDisplay1.textContent = `${score1}/${quizData1.length}`;
-                        if (window.appState) { window.appState.quizScores['mod1'] = score1; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(1, quizData1);
             } catch (e) { console.error("Error Mod 1:", e); }
         })();
 
@@ -1403,50 +1415,7 @@
                     { q: "Si un paciente mira 'Abajo a la izquierda' (modelo clásico diestro), probablemente está:", options: ["Recordando una imagen", "Construyendo un sonido", "Teniendo un diálogo interno (Ad)", "Sintiendo una emoción fuerte"], correct: 2, feedback: "Abajo a la izquierda corresponde al diálogo interno / Auditivo Digital." }
                 ];
 
-                const quizContainer2 = document.getElementById('quiz-container-2');
-                const scoreDisplay2 = document.getElementById('quiz-score-2');
-                let score2 = 0;
-                let answered2 = new Array(quizData2.length).fill(false);
-
-                quizData2.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `
-                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
-                        <div class="space-y-2" id="q2-opts-${index}">
-                            ${item.options.map((opt, i) => `<button class="quiz-btn-2 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
-                        </div>
-                        <div id="q2-feedback-${index}" class="mt-2 text-sm hidden"></div>
-                    `;
-                    quizContainer2.appendChild(qDiv);
-                });
-
-                document.querySelectorAll('.quiz-btn-2').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q);
-                        const optIdx = parseInt(this.dataset.opt);
-                        if (answered2[qIdx]) return;
-                        answered2[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q2-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q2-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData2[qIdx].correct;
-                        buttons.forEach((b, i) => {
-                            b.disabled = true;
-                            if (i === quizData2[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
-                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
-                            else b.classList.add('opacity-50');
-                        });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) {
-                            score2++;
-                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData2[qIdx].feedback}</span>`;
-                        } else {
-                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData2[qIdx].feedback}</span>`;
-                        }
-                        scoreDisplay2.textContent = `${score2}/${quizData2.length}`;
-                        if (window.appState) { window.appState.quizScores['mod2'] = score2; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(2, quizData2);
             } catch (e) { console.error("Error Mod 2:", e); }
         })();
 
@@ -1587,50 +1556,7 @@
                     { q: "La estructura superficial es:", options: ["El significado profundo", "Lo que decimos", "La intención"], correct: 1, feedback: "Es la versión reducida y transformada que sale por nuestra boca." }
                 ];
 
-                const quizContainer3 = document.getElementById('quiz-container-3');
-                const scoreDisplay3 = document.getElementById('quiz-score-3');
-                let score3 = 0;
-                let answered3 = new Array(quizData3.length).fill(false);
-
-                quizData3.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `
-                        <p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p>
-                        <div class="space-y-2" id="q3-opts-${index}">
-                            ${item.options.map((opt, i) => `<button class="quiz-btn-3 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)] transition-colors" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}
-                        </div>
-                        <div id="q3-feedback-${index}" class="mt-2 text-sm hidden"></div>
-                    `;
-                    quizContainer3.appendChild(qDiv);
-                });
-
-                document.querySelectorAll('.quiz-btn-3').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q);
-                        const optIdx = parseInt(this.dataset.opt);
-                        if (answered3[qIdx]) return;
-                        answered3[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q3-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q3-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData3[qIdx].correct;
-                        buttons.forEach((b, i) => {
-                            b.disabled = true;
-                            if (i === quizData3[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500', 'text-emerald-700', 'dark:text-emerald-300');
-                            else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500', 'text-red-700', 'dark:text-red-300');
-                            else b.classList.add('opacity-50');
-                        });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) {
-                            score3++;
-                            feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Correcto.</span> <span class="text-[var(--text-muted)]">${quizData3[qIdx].feedback}</span>`;
-                        } else {
-                            feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗ Incorrecto.</span> <span class="text-[var(--text-muted)]">${quizData3[qIdx].feedback}</span>`;
-                        }
-                        scoreDisplay3.textContent = `${score3}/${quizData3.length}`;
-                        if (window.appState) { window.appState.quizScores['mod3'] = score3; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(3, quizData3);
             } catch (e) { console.error("Error Mod 3:", e); }
         })();
         // ==========================================
@@ -1670,31 +1596,7 @@
                     { q: "El Modelo Milton se extrajo de:", options: ["Perls", "Erickson", "Satir"], correct: 1, feedback: "Milton Erickson." },
                     { q: "El trance hipnótico en PNL se define como:", options: ["Pérdida de consciencia", "Estado de focalización atencional interna", "Dormir"], correct: 1, feedback: "No es inconsciencia, es focalización." }
                 ];
-                const quizContainer4 = document.getElementById('quiz-container-4');
-                const scoreDisplay4 = document.getElementById('quiz-score-4');
-                let score4 = 0;
-                let answered4 = new Array(quizData4.length).fill(false);
-
-                quizData4.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q4-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-4 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q4-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
-                    quizContainer4.appendChild(qDiv);
-                });
-                document.querySelectorAll('.quiz-btn-4').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
-                        if (answered4[qIdx]) return; answered4[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q4-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q4-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData4[qIdx].correct;
-                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData4[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) { score4++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData4[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData4[qIdx].feedback}</span>`; }
-                        scoreDisplay4.textContent = `${score4}/${quizData4.length}`;
-                        if (window.appState) { window.appState.quizScores['mod4'] = score4; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(4, quizData4);
             } catch (e) { console.error("Error Mod 4:", e); }
         })();
 
@@ -1762,30 +1664,7 @@
                     { q: "Modificar la emoción de un recuerdo pasado con un recurso se llama:", options: ["Cambio de Historia", "Reencuadre", "Swish"], correct: 0, feedback: "Cambio de historia personal." },
                     { q: "Para que un colapso funcione, el recurso debe ser:", options: ["Menos intenso", "Igual de intenso", "Más intenso"], correct: 2, feedback: "El recurso debe superar al límite." }
                 ];
-                const quizContainer5 = document.getElementById('quiz-container-5');
-                const scoreDisplay5 = document.getElementById('quiz-score-5');
-                let score5 = 0; let answered5 = new Array(quizData5.length).fill(false);
-
-                quizData5.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q5-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-5 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q5-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
-                    quizContainer5.appendChild(qDiv);
-                });
-                document.querySelectorAll('.quiz-btn-5').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
-                        if (answered5[qIdx]) return; answered5[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q5-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q5-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData5[qIdx].correct;
-                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData5[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) { score5++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData5[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData5[qIdx].feedback}</span>`; }
-                        scoreDisplay5.textContent = `${score5}/${quizData5.length}`;
-                        if (window.appState) { window.appState.quizScores['mod5'] = score5; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(5, quizData5);
             } catch (e) { console.error("Error Mod 5:", e); }
         })();
 
@@ -1863,30 +1742,7 @@
                     { q: "Si un cliente dice 'Aquí no puedo', interviene en el nivel de:", options: ["Entorno", "Identidad", "Capacidad"], correct: 0, feedback: "'Aquí' = Entorno." },
                     { q: "Las estrategias en PNL se representan como:", options: ["Secuencias de letras (Ve, Ai, Ki)", "Mapas conceptuales", "Árboles"], correct: 0, feedback: "Notación VAK con e/i (externo/interno)." }
                 ];
-                const quizContainer6 = document.getElementById('quiz-container-6');
-                const scoreDisplay6 = document.getElementById('quiz-score-6');
-                let score6 = 0; let answered6 = new Array(quizData6.length).fill(false);
-
-                quizData6.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q6-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-6 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q6-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
-                    quizContainer6.appendChild(qDiv);
-                });
-                document.querySelectorAll('.quiz-btn-6').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
-                        if (answered6[qIdx]) return; answered6[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q6-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q6-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData6[qIdx].correct;
-                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData6[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) { score6++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData6[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData6[qIdx].feedback}</span>`; }
-                        scoreDisplay6.textContent = `${score6}/${quizData6.length}`;
-                        if (window.appState) { window.appState.quizScores['mod6'] = score6; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(6, quizData6);
             } catch (e) { console.error("Error Mod 6:", e); }
         })();
                 // ==========================================
@@ -1930,30 +1786,7 @@
                     { q: "Intentar calmar a alguien sin validar antes su enfado suele generar:", options: ["Rapport", "Resistencia", "Trance"], correct: 1, feedback: "Falta de pacing." },
                     { q: "La 4ª posición perceptual se centra en:", options: ["El 'Yo'", "El 'Tú'", "El 'Nosotros'/Sistema"], correct: 2, feedback: "Visión sistémica." }
                 ];
-                const quizContainer7 = document.getElementById('quiz-container-7');
-                const scoreDisplay7 = document.getElementById('quiz-score-7');
-                let score7 = 0; let answered7 = new Array(quizData7.length).fill(false);
-
-                quizData7.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q7-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-7 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q7-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
-                    quizContainer7.appendChild(qDiv);
-                });
-                document.querySelectorAll('.quiz-btn-7').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
-                        if (answered7[qIdx]) return; answered7[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q7-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q7-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData7[qIdx].correct;
-                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData7[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) { score7++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData7[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData7[qIdx].feedback}</span>`; }
-                        scoreDisplay7.textContent = `${score7}/${quizData7.length}`;
-                        if (window.appState) { window.appState.quizScores['mod7'] = score7; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(7, quizData7);
             } catch (e) { console.error("Error Mod 7:", e); }
         })();
 
@@ -1990,32 +1823,9 @@
                     { q: "El test ecológico responde a la pregunta:", options: ["¿Cuánto cuesta?", "¿Cómo afectará este cambio al resto de mi vida?", "¿Quién es el terapeuta?"], correct: 1, feedback: "Impacto sistémico." },
                     { q: "El rebobinado rápido (rewind) en la Fast Phobia utiliza:", options: ["Submodalidades auditivas", "Submodalidades visuales y velocidad", "Anclas kinestésicas"], correct: 1, feedback: "Distorsiona el tiempo visual." }
                 ];
-                const quizContainer8 = document.getElementById('quiz-container-8');
-                const scoreDisplay8 = document.getElementById('quiz-score-8');
-                let score8 = 0; let answered8 = new Array(quizData8.length).fill(false);
-
-                quizData8.forEach((item, index) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'p-4 rounded border border-[var(--border-color)] bg-[var(--bg-main)]';
-                    qDiv.innerHTML = `<p class="font-semibold mb-3 text-[var(--text-main)]">${index + 1}. ${item.q}</p><div class="space-y-2" id="q8-opts-${index}">${item.options.map((opt, i) => `<button class="quiz-btn-8 w-full text-left p-2 rounded text-sm bg-white dark:bg-slate-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 border border-[var(--border-color)]" data-q="${index}" data-opt="${i}">${opt}</button>`).join('')}</div><div id="q8-feedback-${index}" class="mt-2 text-sm hidden"></div>`;
-                    quizContainer8.appendChild(qDiv);
-                });
-                document.querySelectorAll('.quiz-btn-8').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const qIdx = parseInt(this.dataset.q); const optIdx = parseInt(this.dataset.opt);
-                        if (answered8[qIdx]) return; answered8[qIdx] = true;
-                        const buttons = document.querySelectorAll(`#q8-opts-${qIdx} button`);
-                        const feedbackDiv = document.getElementById(`q8-feedback-${qIdx}`);
-                        const isCorrect = optIdx === quizData8[qIdx].correct;
-                        buttons.forEach((b, i) => { b.disabled = true; if (i === quizData8[qIdx].correct) b.classList.add('bg-emerald-100', 'dark:bg-emerald-900/50', 'border-emerald-500'); else if (i === optIdx && !isCorrect) b.classList.add('bg-red-100', 'dark:bg-red-900/50', 'border-red-500'); else b.classList.add('opacity-50'); });
-                        feedbackDiv.classList.remove('hidden');
-                        if (isCorrect) { score8++; feedbackDiv.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">✓</span> <span class="text-[var(--text-muted)]">${quizData8[qIdx].feedback}</span>`; } else { feedbackDiv.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">✗</span> <span class="text-[var(--text-muted)]">${quizData8[qIdx].feedback}</span>`; }
-                        scoreDisplay8.textContent = `${score8}/${quizData8.length}`;
-                        if (window.appState) { window.appState.quizScores['mod8'] = score8; if (window.saveState) window.saveState(); }
-                    });
-                });
+                window.initQuiz(8, quizData8);
             } catch (e) { console.error("Error Mod 8:", e); }
         })();
     </script>
 </body>
-</html>
+</html>
