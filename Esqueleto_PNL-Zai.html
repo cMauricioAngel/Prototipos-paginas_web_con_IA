@@ -48,9 +48,17 @@
 
     <!-- Mermaid.js (Diagramas) -->
     <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
-        window.mermaid = mermaid;
+        try {
+            const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs');
+            mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+            window.mermaid = mermaid;
+        } catch (error) {
+            if (window.reportAppError) {
+                window.reportAppError('Error al cargar Mermaid', error, 'Los diagramas no están disponibles en este momento.');
+            } else {
+                console.error('Error al cargar Mermaid:', error);
+            }
+        }
     </script>
 
     <style>
@@ -1081,28 +1089,83 @@
         // SISTEMA CORE: Persistencia y Estado
         // ==========================================
         const STORAGE_KEY = 'edu_platform_pnl';
-        let appState = {
-            theme: 'light',
-            readSections: [],
-            quizScores: {}
-        };
+
+        function createDefaultState() {
+            return {
+                theme: 'light',
+                readSections: [],
+                quizScores: {}
+            };
+        }
+
+        function showAppError(message) {
+            let alert = document.getElementById('app-error-alert');
+            if (!alert) {
+                alert = document.createElement('div');
+                alert.id = 'app-error-alert';
+                alert.className = 'fixed bottom-4 right-4 z-50 max-w-md rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800 shadow-lg dark:border-red-700 dark:bg-red-950 dark:text-red-200';
+                alert.setAttribute('role', 'alert');
+                alert.setAttribute('aria-live', 'assertive');
+                document.body.appendChild(alert);
+            }
+            alert.textContent = message;
+        }
+
+        function reportAppError(context, error, userMessage) {
+            const normalizedError = error instanceof Error ? error : new Error(String(error));
+            console.error(`${context}:`, normalizedError);
+            window.dispatchEvent(new CustomEvent('app:error', {
+                detail: { context, error: normalizedError }
+            }));
+            if (userMessage) showAppError(userMessage);
+            return normalizedError;
+        }
+
+        function parseStoredState(savedState) {
+            const parsedState = JSON.parse(savedState);
+            if (!parsedState || typeof parsedState !== 'object' || Array.isArray(parsedState)) {
+                throw new TypeError('El estado guardado no es un objeto válido.');
+            }
+            if ('theme' in parsedState && !['light', 'dark'].includes(parsedState.theme)) {
+                throw new TypeError('El tema guardado no es válido.');
+            }
+            if ('readSections' in parsedState && !Array.isArray(parsedState.readSections)) {
+                throw new TypeError('Las secciones guardadas no son válidas.');
+            }
+            if ('quizScores' in parsedState && (!parsedState.quizScores || typeof parsedState.quizScores !== 'object' || Array.isArray(parsedState.quizScores))) {
+                throw new TypeError('Las puntuaciones guardadas no son válidas.');
+            }
+            return {
+                theme: parsedState.theme || 'light',
+                readSections: [...new Set((parsedState.readSections || []).filter(section => typeof section === 'string'))],
+                quizScores: { ...(parsedState.quizScores || {}) }
+            };
+        }
+
+        let appState = createDefaultState();
 
         try {
             const savedState = localStorage.getItem(STORAGE_KEY);
             if (savedState) {
-                appState = JSON.parse(savedState);
+                appState = parseStoredState(savedState);
             }
         } catch (e) {
-            console.error("Error al cargar el estado", e);
+            reportAppError('Error al cargar el estado', e, 'No se pudo recuperar tu progreso guardado. Se inició una sesión nueva.');
         }
 
         function saveState() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                return true;
             } catch (e) {
-                console.error("Error al guardar el estado", e);
+                reportAppError('Error al guardar el estado', e, 'No se pudo guardar tu progreso. Revisa la configuración de almacenamiento del navegador.');
+                return false;
             }
         }
+
+        window.appState = appState;
+        window.saveState = saveState;
+        window.reportAppError = reportAppError;
 
         // ==========================================
         // SISTEMA CORE: Modo Oscuro
@@ -1184,32 +1247,53 @@
         // SISTEMA CORE: Renderizado Perezoso
         // ==========================================
         window.processDynamicContent = function(container) {
-            try {
-                if (window.renderMathInElement) {
+            if (!container || typeof container.querySelectorAll !== 'function') {
+                throw new TypeError('Se requiere un contenedor válido para procesar el contenido dinámico.');
+            }
+
+            if (window.renderMathInElement) {
+                try {
                     renderMathInElement(container, {
                         delimiters: [
                             {left: '\\(', right: '\\)', display: false},
                             {left: '\\[', right: '\\]', display: true}
                         ],
-                        throwOnError: false
-                    });
-                }
-                if (window.mermaid) {
-                    const mermaidBlocks = container.querySelectorAll('.mermaid');
-                    mermaidBlocks.forEach((block, index) => {
-                        if (!block.getAttribute('data-processed')) {
-                            block.setAttribute('data-processed', 'true');
-                            const id = `mermaid-graph-${Date.now()}-${index}`;
-                            block.id = id;
+                        throwOnError: false,
+                        errorCallback: (message, error) => {
+                            reportAppError('Error al renderizar una fórmula', error || message, 'Una fórmula no pudo mostrarse correctamente.');
                         }
                     });
-                    window.mermaid.run({ nodes: mermaidBlocks });
+                } catch (e) {
+                    reportAppError('Error al procesar fórmulas', e, 'Las fórmulas matemáticas no pudieron mostrarse correctamente.');
                 }
-                if (window.Prism) {
+            }
+
+            if (window.mermaid) {
+                const mermaidBlocks = Array.from(container.querySelectorAll('.mermaid'))
+                    .filter(block => block.getAttribute('data-processed') !== 'true');
+                mermaidBlocks.forEach((block, index) => {
+                    if (!block.id) block.id = `mermaid-graph-${Date.now()}-${index}`;
+                });
+
+                if (mermaidBlocks.length > 0) {
+                    try {
+                        Promise.resolve(window.mermaid.run({ nodes: mermaidBlocks })).catch(e => {
+                            mermaidBlocks.forEach(block => block.removeAttribute('data-processed'));
+                            reportAppError('Error al renderizar diagramas', e, 'Uno o más diagramas no pudieron mostrarse correctamente.');
+                        });
+                    } catch (e) {
+                        mermaidBlocks.forEach(block => block.removeAttribute('data-processed'));
+                        reportAppError('Error al preparar diagramas', e, 'Uno o más diagramas no pudieron mostrarse correctamente.');
+                    }
+                }
+            }
+
+            if (window.Prism) {
+                try {
                     window.Prism.highlightAllUnder(container);
+                } catch (e) {
+                    reportAppError('Error al resaltar código', e, 'Un bloque de código no pudo mostrarse correctamente.');
                 }
-            } catch (e) {
-                console.error("Error procesando contenido dinámico:", e);
             }
         };
 
@@ -1217,6 +1301,7 @@
             const initialProgress = (appState.readSections.length / 9) * 100;
             progressBar.style.width = `${initialProgress}%`;
             progressText.textContent = `${Math.round(initialProgress)}%`;
+            window.processDynamicContent(document);
         });
         
         // ==========================================
@@ -1327,7 +1412,9 @@
                         if (window.appState) { window.appState.quizScores['mod1'] = score1; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 1:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 1', e, 'El módulo 1 no pudo inicializarse correctamente.');
+            }
         })();
 
         // ==========================================
@@ -1447,7 +1534,9 @@
                         if (window.appState) { window.appState.quizScores['mod2'] = score2; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 2:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 2', e, 'El módulo 2 no pudo inicializarse correctamente.');
+            }
         })();
 
         // ==========================================
@@ -1631,7 +1720,9 @@
                         if (window.appState) { window.appState.quizScores['mod3'] = score3; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 3:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 3', e, 'El módulo 3 no pudo inicializarse correctamente.');
+            }
         })();
         // ==========================================
         // SCRIPTS MÓDULO 4
@@ -1695,7 +1786,9 @@
                         if (window.appState) { window.appState.quizScores['mod4'] = score4; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 4:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 4', e, 'El módulo 4 no pudo inicializarse correctamente.');
+            }
         })();
 
         // ==========================================
@@ -1786,7 +1879,9 @@
                         if (window.appState) { window.appState.quizScores['mod5'] = score5; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 5:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 5', e, 'El módulo 5 no pudo inicializarse correctamente.');
+            }
         })();
 
         // ==========================================
@@ -1887,7 +1982,9 @@
                         if (window.appState) { window.appState.quizScores['mod6'] = score6; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 6:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 6', e, 'El módulo 6 no pudo inicializarse correctamente.');
+            }
         })();
                 // ==========================================
         // SCRIPTS MÓDULO 7
@@ -1954,7 +2051,9 @@
                         if (window.appState) { window.appState.quizScores['mod7'] = score7; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 7:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 7', e, 'El módulo 7 no pudo inicializarse correctamente.');
+            }
         })();
 
         // ==========================================
@@ -2014,7 +2113,9 @@
                         if (window.appState) { window.appState.quizScores['mod8'] = score8; if (window.saveState) window.saveState(); }
                     });
                 });
-            } catch (e) { console.error("Error Mod 8:", e); }
+            } catch (e) {
+                reportAppError('Error al inicializar el módulo 8', e, 'El módulo 8 no pudo inicializarse correctamente.');
+            }
         })();
     </script>
 </body>
