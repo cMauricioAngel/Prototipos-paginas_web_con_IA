@@ -1914,7 +1914,13 @@
                     }
                     resultEl.classList.remove('hidden');
                     resultEl.className = "mt-4 p-4 rounded bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm";
-                    resultEl.innerHTML = `<strong>Síntesis Integrativa (Meta-Mirror):</strong><br> Reconoces tu verdad ("${p1}"), empatizas con el otro ("${p2}"), observas con objetividad ("${p3}"), y atiendes al sistema ("${p4}"). Esta amplitud de perspectiva te otorga flexibilidad conductual para resolver el conflicto.`;
+                    resultEl.replaceChildren();
+                    const title = document.createElement('strong');
+                    title.textContent = 'Síntesis Integrativa (Meta-Mirror):';
+                    resultEl.append(title, document.createElement('br'));
+                    resultEl.append(
+                        ` Reconoces tu verdad ("${p1}"), empatizas con el otro ("${p2}"), observas con objetividad ("${p3}"), y atiendes al sistema ("${p4}"). Esta amplitud de perspectiva te otorga flexibilidad conductual para resolver el conflicto.`
+                    );
                 });
 
                 // Quiz 7
